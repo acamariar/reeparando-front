@@ -1,0 +1,585 @@
+{
+  "usuarios": [
+    {
+      "id": "u1",
+      "usuario": "nathaly",
+      "clave": "1111",
+      "nivel": 1
+    },
+    {
+      "id": "u2",
+      "usuario": "franklin",
+      "clave": "2022",
+      "nivel": 1
+    },
+    {
+      "id": "u3",
+      "usuario": "maria",
+      "clave": "1234",
+      "nivel": 1
+    }
+  ],
+  "proyectos": [
+    {
+      "name": "vta0049",
+      "client": "jose diaz ",
+      "address": "Emilio mitre 87",
+      "category": "impermeabilizacion",
+      "status": "En Progreso",
+      "budget": 15000,
+      "dueDate": "2026-02-27",
+      "progress": 0,
+      "description": "impermiabilizar terraza ",
+      "team": [
+        "emp-001"
+      ],
+      "id": "3168770e-1e5e-44bd-aa39-8d23ea39655c"
+    },
+    {
+      "name": "María Enriqueta romero Fernandez",
+      "client": "jose diaz ",
+      "address": "Cosme Argerich 2029",
+      "category": "refaccion",
+      "status": "En Progreso",
+      "budget": 15000000,
+      "dueDate": "2026-03-07",
+      "progress": 0,
+      "description": "lkjhgfdzxcvbnm,",
+      "team": [
+        "MG",
+        "emp-009",
+        "emp-007",
+        "emp-001"
+      ],
+      "id": "V4bkyfr"
+    },
+    {
+      "team": [
+        "jonny",
+        "emp-006"
+      ],
+      "description": "prueba2 ",
+      "progress": 3,
+      "dueDate": "2026-03-07",
+      "budget": 1500,
+      "status": "En Progreso",
+      "category": "puesto de Trabajo",
+      "address": "Emilio mitre 87",
+      "client": "jose diaz ",
+      "name": "vt001",
+      "id": "diexZHj"
+    },
+    {
+      "name": "Ecologicos",
+      "client": "jose diaz ",
+      "address": "Emilio mitre 87",
+      "category": "refaccion",
+      "status": "En Progreso",
+      "budget": 1500000000,
+      "dueDate": "2026-02-21",
+      "progress": 0,
+      "description": "prueba3 ",
+      "team": [
+        "emp-001"
+      ],
+      "id": "3ytCQ86"
+    },
+    {
+      "name": "vt02255",
+      "client": "cli-001",
+      "address": "Emilio mitre 87",
+      "category": "pintura",
+      "status": "En Progreso",
+      "budget": 2410320,
+      "dueDate": "2026-02-28",
+      "progress": 0,
+      "description": "Revoque y regularización de pared verde (sector ladrillo + aplicación de base coat completa)Revoque de pared frontal grande con base coat en dos manos para lograr una terminación fina Revoque y prolijado de pared de la puerta prolijado y refuerzo de todas las columnas Eliminación de pestañas de hierro del antiguo marco mediante amoladora y regularización con cemento, Ejecución de nuevo escalón curvo tipo media luna,con leve rampa para facilitar el tránsito Relleno de hueco en el piso del patio (frente a pared verde), con escombro y cemento,dejando caja de cemento por cañería existente Reparación y nivelación de sectores de piso con cerámicas levantadas, dejándolos al ras y a nivel de las otras Reparación y nivelación de escalon pared frontal a la pared verde",
+      "team": [
+        "emp-001",
+        "emp-010",
+        "emp-007",
+        "emp-006"
+      ],
+      "id": "h7XWLo4"
+    },
+    {
+      "name": "vt0123",
+      "client": "cli-001",
+      "address": "Emilio mitre 87",
+      "category": "puesto de Trabajo",
+      "budget": 15000,
+      "dueDate": "2026-02-28",
+      "description": "",
+      "team": [
+        "emp-001"
+      ],
+      "id": "LS4_rKz"
+    }
+  ],
+  "personal": [
+    {
+      "id": "emp-001",
+      "firstName": "Ana",
+      "lastName": "Rivas",
+      "birthDate": "1992-04-18",
+      "address": "Calle 10 #45, Miami, FL",
+      "addressProof": "servicio",
+      "criminalRecord": "presentado",
+      "email": "ana.rivas@reeparando.com",
+      "phone": "+1 305 555 1201",
+      "emergencyContactName": "Laura Rivas",
+      "emergencyContactPhone": "+1 305 555 3300",
+      "alias": "ANA.RIVAS.BAP",
+      "cbu": "2850590940098765432101",
+      "specialty": "Impermeabilización y pintura",
+      "coverageAreas": [
+        "Miami Beach",
+        "Downtown"
+      ],
+      "availability": "Lun-Sáb 8:00-18:00",
+      "shirtSize": "M",
+      "shoeSize": "39",
+      "status": "activo",
+      "salary": 2100,
+      "startDate": "2025-05-10",
+      "saldoActual": 20000
+    },
+    {
+      "id": "emp-006",
+      "firstName": "Carlos",
+      "lastName": "Méndez",
+      "birthDate": "1990-02-11",
+      "address": "Av. Central 321, Miami, FL",
+      "addressProof": "servicio",
+      "criminalRecord": "presentado",
+      "email": "carlos.mendez@reeparando.com",
+      "phone": "+1 305 555 1206",
+      "emergencyContactName": "Sofía Méndez",
+      "emergencyContactPhone": "+1 305 555 3301",
+      "alias": "CARLOS.MDZ",
+      "cbu": "2850590940098765432102",
+      "specialty": "Electricidad y domótica",
+      "coverageAreas": [
+        "Downtown",
+        "Coral Gables"
+      ],
+      "availability": "Lun-Vie 8:00-17:00",
+      "shirtSize": "L",
+      "shoeSize": "41",
+      "status": "activo",
+      "salary": 2350,
+      "startDate": "2025-06-15",
+      "saldoActual": 0
+    },
+    {
+      "id": "emp-007",
+      "firstName": "Josefina",
+      "lastName": "Torres",
+      "birthDate": "1988-10-03",
+      "address": "Calle 8 #77, Hialeah, FL",
+      "addressProof": "dni",
+      "criminalRecord": "presentado",
+      "email": "josefina.torres@reeparando.com",
+      "phone": "+1 305 555 1207",
+      "emergencyContactName": "María Torres",
+      "emergencyContactPhone": "+1 305 555 3302",
+      "alias": "JOSE.TORRES",
+      "cbu": "2850590940098765432103",
+      "specialty": "Pintura exterior e impermeabilización",
+      "coverageAreas": [
+        "Hialeah",
+        "Miami Beach"
+      ],
+      "availability": "Lun-Sáb 9:00-18:00",
+      "shirtSize": "S",
+      "shoeSize": "38",
+      "status": "activo",
+      "salary": 2050,
+      "startDate": "2025-09-01",
+      "saldoActual": 40000
+    },
+    {
+      "id": "emp-008",
+      "firstName": "Miguel",
+      "lastName": "Salazar",
+      "birthDate": "1993-07-20",
+      "address": "Av. Biscayne 1020, Miami, FL",
+      "addressProof": "servicio",
+      "criminalRecord": "pendiente",
+      "email": "miguel.salazar@reeparando.com",
+      "phone": "+1 305 555 1208",
+      "emergencyContactName": "Lucía Salazar",
+      "emergencyContactPhone": "+1 305 555 3303",
+      "alias": "MIKE.SAL",
+      "cbu": "2850590940098765432104",
+      "specialty": "Plomería y reparaciones generales",
+      "coverageAreas": [
+        "Downtown",
+        "Little Havana"
+      ],
+      "availability": "Lun-Vie 7:00-16:00",
+      "shirtSize": "M",
+      "shoeSize": "42",
+      "status": "activo",
+      "startDate": "2025-12-10",
+      "saldoActual": 15000
+    },
+    {
+      "id": "emp-009",
+      "firstName": "Patricia",
+      "lastName": "García",
+      "birthDate": "1995-01-14",
+      "address": "Calle 25 #210, Miami, FL",
+      "addressProof": "servicio",
+      "criminalRecord": "presentado",
+      "email": "patricia.garcia@reeparando.com",
+      "phone": "+1 305 555 1209",
+      "emergencyContactName": "Diego García",
+      "emergencyContactPhone": "+1 305 555 3304",
+      "alias": "PAT.GARCIA",
+      "cbu": "2850590940098765432105",
+      "specialty": "Carpintería y drywall",
+      "coverageAreas": [
+        "Coral Gables",
+        "Little Havana"
+      ],
+      "availability": "Lun-Sáb 8:00-17:00",
+      "shirtSize": "M",
+      "shoeSize": "39",
+      "status": "activo",
+      "startDate": "2026-01-08",
+      "saldoActual": 0
+    },
+    {
+      "id": "emp-010",
+      "firstName": "Juan",
+      "lastName": "Paredes",
+      "birthDate": "1987-12-02",
+      "address": "Av. Flagler 455, Miami, FL",
+      "addressProof": "dni",
+      "criminalRecord": "presentado",
+      "email": "juan.paredes@reeparando.com",
+      "phone": "+1 305 555 1210",
+      "emergencyContactName": "Claudia Paredes",
+      "emergencyContactPhone": "+1 305 555 3305",
+      "alias": "JUAN.PAREDES",
+      "cbu": "2850590940098765432106",
+      "specialty": "Impermeabilización de techos y terrazas",
+      "coverageAreas": [
+        "Miami Beach",
+        "Wynwood"
+      ],
+      "availability": "Lun-Vie 8:00-18:00",
+      "shirtSize": "L",
+      "shoeSize": "43",
+      "status": "activo",
+      "salary": 2400,
+      "startDate": "2025-07-22",
+      "saldoActual": 0
+    },
+    {
+      "firstName": "jose ",
+      "lastName": "diaz",
+      "birthDate": "1956-07-09",
+      "address": "Emilio mitre 87",
+      "addressProof": "fc 00441254",
+      "criminalRecord": "presentado",
+      "email": "josediaz@gmail.com",
+      "phone": "+54 9 1162727884",
+      "emergencyContactName": "1166332255",
+      "emergencyContactPhone": "236523652",
+      "alias": "josejose",
+      "cbu": "12321233211",
+      "specialty": "plomero ",
+      "coverageAreas": [
+        "caba",
+        "san isidro",
+        "lanus"
+      ],
+      "availability": "9:00 am - 5:00 pm",
+      "shirtSize": "xxl",
+      "shoeSize": "45",
+      "saldoActual": 0,
+      "status": "activo",
+      "startDate": "2026-02-09",
+      "id": "54d0e0b7-b132-4c58-acb6-8db887cbad04"
+    }
+  ],
+  "clientes": [
+    {
+      "id": "cli-001",
+      "firstName": "María",
+      "lastName": "Gómez",
+      "phone": "+54 1162727884",
+      "email": "maria.gomez@example.com",
+      "address": "Calle 12 #45",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33101",
+      "dni": "DNI 45223311",
+      "notes": "Prefiere contacto por WhatsApp",
+      "createdAt": "2025-11-02"
+    }
+  ],
+  "gastosProyecto": [
+    {
+      "id": "exp-001",
+      "projectId": "prj-2026-001",
+      "concept": "Membrana poliuretano",
+      "category": "materiales",
+      "amount": 480.5,
+      "date": "2026-02-05",
+      "supplier": "Proveeduría Miami",
+      "invoiceRef": "FAC-2201"
+    },
+    {
+      "id": "exp-002",
+      "projectId": "prj-2026-001",
+      "concept": "Alquiler andamio",
+      "category": "equipo",
+      "amount": 150,
+      "date": "2026-02-06",
+      "supplier": "EquipRent",
+      "invoiceRef": "AR-5543"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "concept": "membrana",
+      "category": "Materiales",
+      "amount": 150000,
+      "date": "2026-02-06",
+      "supplier": "materiales",
+      "invoiceRef": "234dd",
+      "id": "Dld9Osq"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "concept": "membrana",
+      "category": "Materiales",
+      "amount": 150000,
+      "date": "2026-02-06",
+      "supplier": "imagenes",
+      "invoiceRef": "330022",
+      "id": "8U0mj7A"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "concept": "membrana liquida",
+      "category": "Materiales",
+      "amount": 150000,
+      "date": "2026-02-06",
+      "supplier": "imagenes",
+      "invoiceRef": "223366",
+      "id": "DjmZ9mm"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "concept": "membrana",
+      "category": "Materiales",
+      "amount": 150000,
+      "date": "2026-02-09",
+      "supplier": "materiales",
+      "invoiceRef": "fc0045",
+      "id": "rBF_21J"
+    }
+  ],
+  "tiempos": [
+    {
+      "projectId": "h7XWLo4",
+      "employeeId": "emp-001",
+      "date": "2026-02-07",
+      "hours": 5,
+      "hourlyRate": 1,
+      "amount": 5,
+      "notes": "",
+      "id": "9dVn68L"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "employeeId": "emp-001",
+      "date": "2026-02-09",
+      "hours": 5,
+      "hourlyRate": 1000,
+      "amount": 5000,
+      "notes": "",
+      "id": "3AH1t-m"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "employeeId": "emp-010",
+      "date": "2026-02-09",
+      "hours": 5,
+      "hourlyRate": 1000,
+      "amount": 5000,
+      "notes": "",
+      "id": "DPPWFEH"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "employeeId": "emp-010",
+      "date": "2026-02-09",
+      "hours": 5,
+      "hourlyRate": 1000,
+      "amount": 5000,
+      "notes": "prueba añadir horas al proyecto",
+      "id": "EO9QgGy"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "employeeId": "emp-001",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 15000,
+      "notes": "",
+      "id": "fESiZ4m"
+    },
+    {
+      "projectId": "diexZHj",
+      "employeeId": "emp-006",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 15000,
+      "notes": "",
+      "id": "ScNUbyB"
+    },
+    {
+      "projectId": "diexZHj",
+      "employeeId": "emp-006",
+      "date": "2026-02-09",
+      "hours": 0,
+      "amount": 150000,
+      "notes": "",
+      "id": "CcR7t2W"
+    },
+    {
+      "projectId": "V4bkyfr",
+      "employeeId": "emp-009",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 50000,
+      "notes": "",
+      "id": "XQEVBiD"
+    },
+    {
+      "projectId": "V4bkyfr",
+      "employeeId": "emp-009",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 150000,
+      "notes": "",
+      "id": "9vlgOzc"
+    },
+    {
+      "projectId": "V4bkyfr",
+      "employeeId": "emp-009",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 150000,
+      "notes": "",
+      "id": "gk1beAJ"
+    },
+    {
+      "projectId": "diexZHj",
+      "employeeId": "emp-006",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 15000,
+      "notes": "",
+      "id": "TpsgM28"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "employeeId": "emp-007",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 35000,
+      "notes": "",
+      "id": "YeLHWIE"
+    },
+    {
+      "projectId": "V4bkyfr",
+      "employeeId": "emp-007",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 35000,
+      "notes": "",
+      "id": "RIhnAqe"
+    },
+    {
+      "projectId": "h7XWLo4",
+      "employeeId": "emp-001",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 35000,
+      "notes": "",
+      "id": "qxY9-x_"
+    },
+    {
+      "projectId": "V4bkyfr",
+      "employeeId": "emp-001",
+      "date": "2026-02-09",
+      "hours": 5,
+      "amount": 35000,
+      "notes": "",
+      "id": "hin2XSW"
+    }
+  ],
+  "pagosPersonal": [
+    {
+      "id": "pay-001",
+      "employeeId": "emp-001",
+      "date": "2026-02-10",
+      "type": "pago",
+      "amount": 50000,
+      "notes": "Pago semana 6"
+    },
+    {
+      "employeeId": "emp-006",
+      "date": "2026-02-09",
+      "type": "pago",
+      "amount": 15000,
+      "notes": "",
+      "id": "yuC0e-a"
+    },
+    {
+      "employeeId": "emp-008",
+      "date": "2026-02-09",
+      "type": "adelanto",
+      "amount": 15000,
+      "notes": "adelanto dia 6/02",
+      "id": "dz5Bnr9"
+    },
+    {
+      "employeeId": "emp-008",
+      "date": "2026-02-09",
+      "type": "adelanto",
+      "amount": 10000,
+      "notes": "",
+      "id": "gfrj8F7"
+    },
+    {
+      "employeeId": "emp-008",
+      "date": "2026-02-09",
+      "type": "adelanto",
+      "amount": 110000,
+      "notes": "",
+      "id": "7IJMjGn"
+    },
+    {
+      "employeeId": "emp-007",
+      "date": "2026-02-09",
+      "type": "adelanto",
+      "amount": 30000,
+      "notes": "adelanto 09/02",
+      "id": "DI3olmr"
+    },
+    {
+      "employeeId": "emp-001",
+      "date": "2026-02-09",
+      "type": "adelanto",
+      "amount": 50000,
+      "notes": "adelanto 09/02",
+      "id": "gRAl7B6"
+    }
+  ]
+}

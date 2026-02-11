@@ -1,0 +1,35 @@
+@config "../tailwind.config.cjs";
+@import "tailwindcss";
+
+@import "tailwindcss";
+@media print {
+
+    /* Oculta todo por visibilidad */
+    body * {
+        visibility: hidden;
+    }
+
+    /* Muestra solo la hoja y su contenido */
+    .print-area,
+    .print-area * {
+        visibility: visible;
+    }
+
+    /* Evita que ocupe espacio fuera de la página */
+    .print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    /* Oculta explícitamente controles que no quieres */
+    .no-print {
+        display: none !important;
+    }
+
+    /* Opcional: márgenes de página */
+    @page {
+        margin: 12mm;
+    }
+}
