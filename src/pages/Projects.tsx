@@ -133,11 +133,6 @@ export default function ProjectsPage() {
                                         <span className="text-right text-slate-900">{p.dueDate}</span>
                                     </div>
 
-                                    <div className="text-sm text-slate-700">Progreso</div>
-                                    <div className="h-2 rounded-full bg-slate-200">
-                                        <div className={`h-2 rounded-full ${st.bar}`} style={{ width: `${p.progress}%` }} />
-                                    </div>
-                                    <div className="text-right text-xs font-semibold text-slate-700">{p.progress}%</div>
 
                                     <div className="flex items-center justify-between">
                                         <div className="flex -space-x-2">
