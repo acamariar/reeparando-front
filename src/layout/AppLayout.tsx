@@ -6,11 +6,11 @@ import type { ReactNode } from "react";
 type appLayoutProps = { children: ReactNode };
 
 const navItems = [
-    { to: "/panel", label: "Panel de Control", icon: <Home className="w-5 h-5" /> },
+
     { to: "/proyectos", label: "Proyectos", icon: <Package className="w-5 h-5" /> },
     { to: "/nomina", label: "Nomina", icon: <ClipboardList className="w-5 h-5" /> },
     { to: "/clientes", label: "Clientes", icon: <ClipboardList className="w-5 h-5" /> },
-    { to: "/configuracion", label: "Configuración", icon: <Settings className="w-5 h-5" /> },
+
 ];
 
 export default function AppLayout({ children }: appLayoutProps) {
