@@ -40,15 +40,16 @@ export default function ExpensesDrawer({ open, expenses, loading, onClose }: Pro
                             >
                                 <div className="flex justify-between">
                                     <span className="font-semibold text-slate-900">
-                                        {g.category ?? g.type ?? "Gasto"}
+                                        {g.category}
                                     </span>
                                     <span className="font-semibold text-slate-900">
                                         ${Number(g.amount ?? 0).toLocaleString()}
                                     </span>
                                 </div>
                                 <div className="text-xs text-slate-500">{g.date}</div>
-                                {g.description && (
-                                    <div className="text-slate-600 mt-1">{g.description}</div>
+                                <div className="text-xs text-slate-500">{g.supplier}</div>
+                                {g.concept && (
+                                    <div className="text-slate-600 mt-1">{g.concept}</div>
                                 )}
                             </div>
                         ))}
