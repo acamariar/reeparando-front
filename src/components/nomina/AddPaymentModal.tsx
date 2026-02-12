@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { NumericFormat, type NumberFormatValues } from "react-number-format";
 import { Modal } from "../UI/Modal";
 import { Select } from "../UI/Select";
 import { useBoundStore } from "../../store";
@@ -26,7 +26,7 @@ export default function AddPaymentModal({ open, onClose, employeeId, employeeNam
     const getPaymentsByEmployee = useBoundStore((s) => s.getPaymentsByEmployee);
     const employee = employees.find((e) => e.id === employeeId);
 
-    const { control, handleSubmit, register, reset, formState: { isSubmitting } } = useForm<FormValues>({
+    const { control, handleSubmit, register, reset, setValue, formState: { isSubmitting } } = useForm<FormValues>({
         defaultValues: {
             type: "pago",
             date: new Date().toISOString().slice(0, 10),
@@ -113,23 +113,19 @@ export default function AddPaymentModal({ open, onClose, employeeId, employeeNam
 
                 <label className="text-sm text-slate-700 block">
                     Monto
-                    <Controller
-                        control={control}
-                        name="amount"
-                        render={({ field }) => (
-                            <NumericFormat
-                                {...field}
-                                value={field.value ?? 0}
-                                decimalSeparator="."
-                                thousandSeparator=","
-                                prefix="$ "
-                                allowNegative={false}
-                                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
-                                onValueChange={({ floatValue }) => field.onChange(floatValue ?? 0)}
-                                placeholder="$ 0.00"
-                            />
-                        )}
+                    <NumericFormat
+                        thousandSeparator="."
+                        decimalSeparator=","
+                        allowNegative={false}
+                        inputMode="decimal"
+                        value={useWatch({ control, name: "amount" }) ?? 0}
+                        className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
+                        onValueChange={(v: NumberFormatValues) => {
+                            setValue("amount", v.floatValue ?? 0, { shouldValidate: true });
+                        }}
+                        placeholder="$ 0.00"
                     />
+
                 </label>
 
                 <label className="text-sm text-slate-700 block">

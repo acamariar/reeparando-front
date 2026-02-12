@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { NumericFormat } from "react-number-format";
+import { useForm, useWatch } from "react-hook-form";
+import { NumericFormat, type NumberFormatValues } from "react-number-format";
 import { Modal } from "../UI/Modal";
 import { useBoundStore } from "../../store";
 
@@ -17,8 +17,8 @@ export default function AddBudgetModal({ open, onClose, projectId, currentBudget
     const updateProject = useBoundStore((s) => s.updateProject);
     const getProjects = useBoundStore((s) => s.getProjects);
 
-    const { control, handleSubmit, reset, formState: { isSubmitting } } = useForm<FormValues>({
-        defaultValues: { amount: undefined },
+    const { control, handleSubmit, reset, setValue, formState: { isSubmitting } } = useForm<FormValues>({
+        defaultValues: { amount: 0 },
     });
 
     useEffect(() => {
@@ -53,23 +53,20 @@ export default function AddBudgetModal({ open, onClose, projectId, currentBudget
         >
             <div className="space-y-3">
                 <p className="text-sm text-slate-700">Monto a agregar al presupuesto actual</p>
-                <Controller
-                    control={control}
-                    name="amount"
-                    render={({ field }) => (
-                        <NumericFormat
-                            {...field}
-                            value={field.value ?? 0}
-                            decimalSeparator="."
-                            thousandSeparator=","
-                            prefix="$ "
-                            allowNegative={false}
-                            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
-                            onValueChange={({ floatValue }) => field.onChange(floatValue ?? 0)}
-                            placeholder="$ 0.00"
-                        />
-                    )}
+                <NumericFormat
+                    thousandSeparator="."
+                    decimalSeparator=","
+                    allowNegative={false}
+                    inputMode="decimal"
+                    value={useWatch({ control, name: "amount" }) ?? 0}
+                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
+                    onValueChange={(v: NumberFormatValues) => {
+                        setValue("amount", v.floatValue ?? 0, { shouldValidate: true });
+                    }}
+                    placeholder="$ 0.00"
                 />
+
+
             </div>
         </Modal>
     );

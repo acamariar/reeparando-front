@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm, Controller, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Modal } from "../UI/Modal";
@@ -63,7 +63,7 @@ export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
     const client = useWatch({ control, name: "client", defaultValue: "" });
 
     const teamIds = useWatch({ control, name: "team" });
-    const budget = useWatch({ control, name: "budget", defaultValue: 0 });
+
     const submit = async (values: FormValues) => {
         await onSubmit({
             ...values,
@@ -123,26 +123,17 @@ export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
                     </label>
                     <label className="text-sm text-slate-600">
                         Presupuesto
-                        <Controller
-                            control={control}
-                            name="budget"
-                            render={({ field }) => (
-                                <NumericFormat
-                                    className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
-                                    {...field}
-                                    value={budget ?? 0} // vacío al iniciar
-                                    thousandSeparator=","
-                                    decimalSeparator="."
-                                    prefix="$ "
-                                    allowNegative={false}
-                                    inputMode="decimal"
-                                    placeholder="$ 0.00"
-                                    onValueChange={(v: NumberFormatValues) => {
-                                        setValue("budget", v.floatValue ?? 0, { shouldValidate: true })
-                                    }}
-                                    onBlur={field.onBlur}
-                                />
-                            )}
+                        <NumericFormat
+                            thousandSeparator="."
+                            decimalSeparator=","
+                            allowNegative={false}
+                            inputMode="decimal"
+                            value={useWatch({ control, name: "budget" }) ?? 0}
+                            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
+                            onValueChange={(v: NumberFormatValues) => {
+                                setValue("budget", v.floatValue ?? 0, { shouldValidate: true });
+                            }}
+                            placeholder="$ 0.00"
                         />
                         {errors.budget && <p className="text-xs text-red-600">{errors.budget.message}</p>}
                     </label>
