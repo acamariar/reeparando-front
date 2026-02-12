@@ -23,7 +23,7 @@ export default function ClientsPage() {
     const [page, setPage] = useState(clientPage);
     const [openModal, setOpenModal] = useState(false);
     const [drawerClient, setDrawerClient] = useState<Client | null>(null);
-    const [editing, setEditing] = useState<Client | null>(null);
+
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     // Cargar cuando cambia la página
@@ -49,10 +49,7 @@ export default function ClientsPage() {
         DNI: "dni",
     };
 
-    const handleView = (client: Client) => {
-        setEditing(client);
-        setOpenModal(true); // usa tu modal si ya lo tienes; si no, cámbialo por navigate al detalle
-    };
+
 
 
 
@@ -76,7 +73,7 @@ export default function ClientsPage() {
 
                 {clientError && <div className="text-red-600 text-sm">{clientError}</div>}
                 <Table
-                    items={tableItems as any}          // tu Table espera ClientTypes; es el mismo shape
+                    items={tableItems as ClientTypes}          // tu Table espera ClientTypes; es el mismo shape
                     tableInfo={tableInfo}
                     onView={() => setDrawerOpen(true)}
                     page={page}
@@ -84,6 +81,7 @@ export default function ClientsPage() {
                     setPage={setPage}
                     title="Clientes"
                     totalPages={clientTotalPages}
+                    action={true}
                 >
                     {isLoadingClients && (
                         <p className="text-sm text-slate-500 px-3">Cargando clientes...</p>

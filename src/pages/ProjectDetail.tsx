@@ -11,6 +11,7 @@ import AddExpenseModal from "../components/project/AddExpenseModal";
 import AddTeamModal from "../components/project/AddTeamModal";
 import AddTimeModal from "../components/project/AddTimeModal";
 import AddBudgetModal from "../components/project/AddBudgetModal";
+import ExpensesDrawer from "../components/project/BudgetDrawer";
 
 export default function ProjectDetail() {
     const { id: projectId } = useParams();
@@ -26,12 +27,13 @@ export default function ProjectDetail() {
     const expenses = useBoundStore((s) => s.expenses);
     const getTimeByProject = useBoundStore((s) => s.getTimeByProject);
     const timeEntries = useBoundStore((s) => s.timeEntries);
-
+    const isLoadingExpenses = useBoundStore((s) => s.isLoadingExpenses)
     const getExpensesByProject = useBoundStore((s) => s.getExpensesByProject);
     const [showAddExpense, setShowAddExpense] = useState(false);
     const [showAddTeam, setShowAddTeam] = useState(false);
     const [showAddTime, setShowAddTime] = useState(false);
     const [showAddBudget, setShowAddBudget] = useState(false);
+    const [open, setOpen] = useState(false);
     useEffect(() => {
         if (projectId) {
             getProjects?.(1, 50);
@@ -77,6 +79,11 @@ export default function ProjectDetail() {
             }, {} as Record<string, { employeeId: string; hours: number; amount: number }[]>);
     const employeesMap = new Map(employees.map(e => [e.id, e]));
     const dates = Object.keys(entriesByDate).sort();
+
+    const openDrawer = () => {
+        setOpen(true);
+        void getExpensesByProject(projectId, 1, 20);
+    };
 
     return (
         <AppLayout>
@@ -213,7 +220,9 @@ export default function ProjectDetail() {
                                 <p className="text-sm text-slate-500">Cliente no asignado.</p>
                             )}
                         </div>
-                        <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-2">
+                        <div
+                            onClick={openDrawer}
+                            className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-2 ">
                             <h3 className="font-semibold text-slate-900">Presupuesto</h3>
                             <Row label="Presupuesto Total" value={totalBudget} color="text-slate-900" />
                             <Row label="Gastado" value={totalSpent} color="text-blue-600" />
@@ -279,6 +288,12 @@ export default function ProjectDetail() {
                 onClose={() => setShowAddBudget(false)}
                 projectId={projectId!}
                 currentBudget={project.budget ?? 0}
+            />
+            <ExpensesDrawer
+                open={open}
+                expenses={expenses}
+                loading={isLoadingExpenses}
+                onClose={() => setOpen(false)}
             />
         </AppLayout>
     );

@@ -4,6 +4,7 @@ import {
 } from '@heroicons/react/16/solid';
 import RedireactButton from '../UI/RedireactButton';
 import type { Client } from '../../types/Client';
+import type { EmployeePayment } from '../../types/EmployeePayment';
 
 
 type TableInfoType = {
@@ -11,8 +12,8 @@ type TableInfoType = {
 };
 
 type TableProps = {
-    items: ClientTypes
-    tableInfo: TableInfoType;
+    items: ClientTypes | EmployeePayment;
+    tableInfo: TableInfoType | EmployeePayment[];
     onView?: () => void;
     selectedItem?: React.Dispatch<React.SetStateAction<| Client>>;
     page: number;
@@ -21,6 +22,7 @@ type TableProps = {
     title: string;
     totalPages: number;
     children?: React.ReactNode;
+    action: boolean
 };
 const getPages = (total: number, page: number) => {
     let pages: (number | string)[] = [];
@@ -47,6 +49,7 @@ export default function Table({
     redirectTo,
     totalPages,
     children,
+    action
 }: TableProps) {
     return (
         <div className="px-4 sm:px-6 lg:px-8">
@@ -70,9 +73,12 @@ export default function Table({
                                     </th>
                                 );
                             })}
-                            <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                <span className="sr-only">Select</span>
-                            </th>
+
+                            {action && (
+                                <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
+                                    <span className="sr-only">Select</span>
+                                </th>
+                            )}
                         </tr>
                     </thead>
                     <tbody>
@@ -97,7 +103,7 @@ export default function Table({
                                         </td>
                                     );
                                 })}
-                                <td className="px-3 flex justify-end py-3.5 text-sm text-gray-500  border-t ">
+                                {action && (< td className="px-3 flex justify-end py-3.5 text-sm text-gray-500  border-t ">
                                     <RedireactButton
                                         onClick={() => {
                                             selectedItem(item);
@@ -111,12 +117,13 @@ export default function Table({
                                     {index === 0 ? (
                                         <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                                     ) : null}
-                                </td>
+                                </td>)}
                             </tr>
                         ))}
                     </tbody>
                 </table>
-            </div>)}
+            </div>)
+            }
             <nav className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
                 <div className="-mt-px flex w-0 flex-1">
                     <button
@@ -170,6 +177,6 @@ export default function Table({
                     </button>
                 </div>
             </nav>
-        </div>
+        </div >
     );
 }

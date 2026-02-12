@@ -10,7 +10,7 @@ export type EmployeePaymentSlice = {
     paymentPageSize: number;
     paymentTotalPages: number;
     paymentTotalItems: number;
-
+    getPayments: (page: number, limit?: number) => Promise<void>;
     getPaymentsByEmployee: (employeeId: string, projectId?: string, page?: number, limit?: number) => Promise<void>;
     createPayment: (payload: Omit<EmployeePayment, "id">) => Promise<EmployeePayment>;
 };
@@ -28,7 +28,28 @@ export const createEmployeePaymentSlice: StateCreator<
     paymentTotalItems: 0,
     isLoadingPayments: false,
     paymentError: null,
-
+    getPayments: async (page, limit) => {
+        const size = limit ?? get().paymentPageSize;
+        set({ isLoadingPayments: true, paymentError: null });
+        try {
+            const { data, headers } = await api.get<EmployeePayment[]>("/pagosPersonal", {
+                params: { _page: page, _limit: size, _sort: "date", _order: "desc" },
+            });
+            const totalItems = Number(headers["x-total-count"] ?? data.length);
+            const totalPages = Math.max(1, Math.ceil(totalItems / size));
+            set({
+                payments: data,
+                paymentPage: page,
+                paymentPageSize: size,
+                paymentTotalItems: totalItems,
+                paymentTotalPages: totalPages,
+                isLoadingPayments: false,
+            });
+        } catch (err) {
+            set({ isLoadingPayments: false, paymentError: "Error al cargar pagos" });
+            throw err;
+        }
+    },
     getPaymentsByEmployee: async (employeeId, projectId, page = 1, limit) => {
         const size = limit ?? get().paymentPageSize ?? 10;
         set({ isLoadingPayments: true, paymentError: null });

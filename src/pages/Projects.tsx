@@ -123,8 +123,7 @@ export default function ProjectsPage() {
                                     </p>
 
                                     <div className="grid grid-cols-2 gap-y-1 text-sm text-slate-600">
-                                        <span className="text-slate-500">Cliente:</span>
-                                        <span className="text-right font-semibold text-slate-900">{p.client}</span>
+
                                         <span className="text-slate-500">Presupuesto:</span>
                                         <span className="text-right font-semibold text-slate-900">
                                             ${p.budget.toLocaleString()}

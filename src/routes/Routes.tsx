@@ -5,6 +5,8 @@ import ProjectsPage from "../pages/Projects"
 import ProjectDetail from "../pages/ProjectDetail"
 import NominaPage from "../pages/NominaPage"
 import ClientsPage from "../pages/Clients"
+import EmployeeDetailPage from "../pages/EmployeeDetailPage"
+import PaymentsPage from "../pages/PaymentsPage"
 
 
 export default function AppRoutes() {
@@ -17,7 +19,9 @@ export default function AppRoutes() {
                 <Route path="/proyectos" element={<ProjectsPage />} />
                 <Route path="/proyectos/:id" element={<ProjectDetail />} />
                 <Route path="/nomina" element={<NominaPage />} />
+                <Route path="/nomina/pagos" element={<PaymentsPage />} />
                 <Route path="/clientes" element={<ClientsPage />} />
+                <Route path="/empleados/:id" element={<EmployeeDetailPage />} />
 
             </Routes>
         </BrowserRouter>
