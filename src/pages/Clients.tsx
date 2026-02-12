@@ -7,6 +7,7 @@ import type { Client } from "../types/Client";
 import Table from "../components/table/Table";
 import { Plus } from "lucide-react";
 import ClientDrawer from "../components/project/ClientDrawer";
+import { CreateClientModal } from "../components/project/CreateClientModal";
 
 export default function ClientsPage() {
     const {
@@ -94,6 +95,9 @@ export default function ClientsPage() {
                     client={drawerClient}
                     onClose={() => setDrawerOpen(false)}
                 />
+                <CreateClientModal
+                    open={openModal}
+                    onClose={() => setOpenModal(false)} />
             </div>
         </AppLayout>
     );

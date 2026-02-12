@@ -16,6 +16,8 @@ type FormValues = {
     zip?: string;
     dni?: string;
     notes?: string;
+    referenceMedium?: string;
+    generatedSale?: string;
 };
 
 type Props = {
@@ -47,6 +49,9 @@ export function CreateClientModal({ open, onClose }: Props) {
             dni: data.dni ?? "",
             notes: data.notes ?? "",
             createdAt: new Date().toISOString().slice(0, 10),
+            referenceMedium: data.referenceMedium ?? "",
+            generatedSale: data.generatedSale ?? ""
+
         });
         reset();
         onClose();
@@ -88,6 +93,10 @@ export function CreateClientModal({ open, onClose }: Props) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <input className={inputCls} placeholder="ZIP/CP" {...register("zip")} />
                     <input className={inputCls} placeholder="DNI" {...register("dni")} />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <input className={inputCls} placeholder="Medio de Referencia" {...register("referenceMedium")} />
+                    <input className={inputCls} placeholder="Venta Generada?" {...register("generatedSale")} />
                 </div>
                 <textarea className={inputCls} rows={2} placeholder="Notas" {...register("notes")} />
             </div>
