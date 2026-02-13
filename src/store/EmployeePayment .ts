@@ -10,7 +10,7 @@ export type EmployeePaymentSlice = {
     paymentPageSize: number;
     paymentTotalPages: number;
     paymentTotalItems: number;
-    getPayments: (page: number, limit?: number) => Promise<void>;
+    getPayments: (page: number, limit?: number, search?: string, from?: string, to?: string) => Promise<void>;
     getPaymentsByEmployee: (employeeId: string, projectId?: string, page?: number, limit?: number) => Promise<void>;
     createPayment: (payload: Omit<EmployeePayment, "id">) => Promise<EmployeePayment>;
 };
@@ -28,12 +28,20 @@ export const createEmployeePaymentSlice: StateCreator<
     paymentTotalItems: 0,
     isLoadingPayments: false,
     paymentError: null,
-    getPayments: async (page, limit) => {
+    getPayments: async (page, limit, search, from, to) => {
         const size = limit ?? get().paymentPageSize;
         set({ isLoadingPayments: true, paymentError: null });
         try {
             const { data, headers } = await api.get<EmployeePayment[]>("/pagosPersonal", {
-                params: { _page: page, _limit: size, _sort: "date", _order: "desc" },
+                params: {
+                    _page: page,
+                    _limit: size,
+                    search,           // nombre del empleado (o campo que uses)
+                    from,             // fecha inicio (YYYY-MM-DD)
+                    to,               // fecha fin (YYYY-MM-DD)
+                    _sort: "date",
+                    _order: "desc",
+                },
             });
             const totalItems = Number(headers["x-total-count"] ?? data.length);
             const totalPages = Math.max(1, Math.ceil(totalItems / size));

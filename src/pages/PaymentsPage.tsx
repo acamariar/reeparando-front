@@ -20,11 +20,18 @@ export default function PaymentsPage() {
     } = useBoundStore();
 
     const [page, setPage] = useState(paymentPage);
+    const [search, setSearch] = useState("");
+    const [from, setFrom] = useState("");
+    const [to, setTo] = useState("");
+
 
     useEffect(() => {
-        void getPayments(page, paymentPageSize);
-        getEmployees(1, 100)
-    }, [page, paymentPageSize, getPayments, getEmployees]);
+        const t = setTimeout(() => {
+            getEmployees(1, 50)
+            getPayments(page, paymentPageSize, search || undefined, from || undefined, to || undefined);
+        }, 300); // debounce
+        return () => clearTimeout(t);
+    }, [page, paymentPageSize, search, from, to, getPayments, getEmployees]);
 
 
     const employeeMap = useMemo(
@@ -57,10 +64,34 @@ export default function PaymentsPage() {
     return (
         <AppLayout>
             <div className="space-y-4">
-                <div>
-                    <p className="text-sm text-slate-500">Pagos</p>
-                    <h1 className="text-2xl font-bold text-accent">Historial de pagos</h1>
+                <div className=" flex justify-between">
+                    <div>
+                        <p className="text-sm text-slate-500">Pagos</p>
+                        <h1 className="text-2xl font-bold text-accent">Historial de pagos</h1>
+                    </div>
+                    <div className="flex gap-2 items-center mt-4">
+                        <input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Buscar por nombre..."
+                            className="rounded-lg border px-3 py-2 text-sm"
+                        />
+                        <input
+                            type="date"
+                            value={from}
+                            onChange={(e) => setFrom(e.target.value)}
+                            className="rounded-lg border px-3 py-2 text-sm"
+                        />
+                        <input
+                            type="date"
+                            value={to}
+                            onChange={(e) => setTo(e.target.value)}
+                            className="rounded-lg border px-3 py-2 text-sm"
+                        />
+                    </div>
                 </div>
+
+
 
                 {paymentError && <div className="text-red-600 text-sm">{paymentError}</div>}
 

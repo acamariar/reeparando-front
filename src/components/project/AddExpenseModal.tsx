@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useForm, Controller, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { NumericFormat, type NumberFormatValues } from "react-number-format";
@@ -13,7 +13,7 @@ type FormValues = {
     amount: number;
     date: string;
     supplier?: string;
-    invoiceRef?: string;
+    invoiceRef: string;
 };
 
 const schema = yup.object({
@@ -22,7 +22,7 @@ const schema = yup.object({
     amount: yup.number().typeError("Monto inválido").moreThan(0, "Debe ser mayor a 0").required(),
     date: yup.string().required("Fecha requerida"),
     supplier: yup.string().optional(),
-    invoiceRef: yup.string().optional(),
+    invoiceRef: yup.string().required("Numero de Factura Obligatorio"),
 });
 
 type Props = {
@@ -30,10 +30,16 @@ type Props = {
     onClose: () => void;
     projectId: string;
     categories?: string[]; // opcional
+    initialValues?: ProjectExpense | null;
 };
 
-export default function AddExpenseModal({ open, onClose, projectId, categories = ["Materiales", "Mano de Obra", "Equipo", "Otros"] }: Props) {
+export default function AddExpenseModal({ open, onClose, projectId, categories = ["Materiales", "Mano de Obra", "Equipo", "Otros"], initialValues }: Props) {
+    const { updateExpense, getExpensesByProject } = useBoundStore()
     const createExpense = useBoundStore((s) => s.createExpense); // del slice de gastos
+
+
+
+
     const {
         handleSubmit,
         control,
@@ -52,6 +58,28 @@ export default function AddExpenseModal({ open, onClose, projectId, categories =
             invoiceRef: "",
         },
     });
+    useEffect(() => {
+        if (initialValues) {
+            reset({
+                concept: initialValues.concept ?? "",
+                category: initialValues.category ?? categories[0] ?? "Otros",
+                amount: initialValues.amount ?? 0,
+                date: initialValues.date ?? new Date().toISOString().slice(0, 10),
+                supplier: initialValues.supplier ?? "",
+                invoiceRef: initialValues.invoiceRef ?? "",
+            });
+        } else {
+            reset({
+                concept: "",
+                category: categories[0] ?? "Otros",
+                amount: 0,
+                date: new Date().toISOString().slice(0, 10),
+                supplier: "",
+                invoiceRef: "",
+            });
+        }
+    }, [initialValues, categories, reset]);
+
 
     useEffect(() => {
         if (!open) reset();
@@ -67,7 +95,13 @@ export default function AddExpenseModal({ open, onClose, projectId, categories =
             supplier: values.supplier || "",
             invoiceRef: values.invoiceRef || "",
         };
-        await createExpense(payload);
+        if (initialValues?.id) {
+            await updateExpense(initialValues.id, payload);
+        } else {
+            await createExpense(payload);
+        }
+
+        await getExpensesByProject(projectId, 1, 20);
         reset();
         onClose();
     };

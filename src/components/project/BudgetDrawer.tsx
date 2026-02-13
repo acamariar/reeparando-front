@@ -1,5 +1,5 @@
 // src/components/project/ExpensesDrawer.tsx
-import { X } from "lucide-react";
+import { Pencil, Trash2, X } from "lucide-react";
 import type { ProjectExpense } from "../../types/projectExpense";
 
 type Props = {
@@ -7,9 +7,13 @@ type Props = {
     expenses: ProjectExpense[];
     loading: boolean;
     onClose: () => void;
+    onEdit: (g: ProjectExpense) => void
+    onDelete: (id: string) => Promise<void>
 };
 
-export default function ExpensesDrawer({ open, expenses, loading, onClose }: Props) {
+export default function ExpensesDrawer({ open, expenses, loading, onClose, onDelete, onEdit }: Props) {
+
+
     return (
         <div
             className={`fixed inset-0 z-50 transition-opacity ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
@@ -38,13 +42,32 @@ export default function ExpensesDrawer({ open, expenses, loading, onClose }: Pro
                                 key={g.id}
                                 className="rounded-lg border border-slate-200 p-3 shadow-xs"
                             >
+
                                 <div className="flex justify-between">
-                                    <span className="font-semibold text-slate-900">
-                                        {g.category}
-                                    </span>
-                                    <span className="font-semibold text-slate-900">
-                                        ${Number(g.amount ?? 0).toLocaleString()}
-                                    </span>
+                                    <div className="">
+                                        <span className="font-semibold text-slate-900 mr-2">
+                                            {g.category}
+                                        </span>
+                                        <span className="font-semibold text-slate-900">
+                                            ${Number(g.amount ?? 0).toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <div className="">
+                                        <button
+                                            onClick={() => onEdit(g)}
+                                            className="p-2 rounded-full text-slate-500 hover:text-emerald-600 hover:bg-slate-100"
+                                            aria-label="Editar"
+                                        >
+                                            <Pencil className="w-4 h-4" />
+                                        </button>
+                                        <button
+                                            onClick={() => onDelete(g.id)}
+                                            className="p-2 rounded-full text-slate-500 hover:text-red-600 hover:bg-slate-100"
+                                            aria-label="Eliminar"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </div>
                                 </div>
                                 <div className="text-xs text-slate-500">{g.date}</div>
                                 <div className="text-xs text-slate-500">{g.supplier}</div>
@@ -56,6 +79,7 @@ export default function ExpensesDrawer({ open, expenses, loading, onClose }: Pro
                         ))}
                 </div>
             </div>
+
         </div>
     );
 }

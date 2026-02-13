@@ -12,6 +12,7 @@ import AddTeamModal from "../components/project/AddTeamModal";
 import AddTimeModal from "../components/project/AddTimeModal";
 import AddBudgetModal from "../components/project/AddBudgetModal";
 import ExpensesDrawer from "../components/project/BudgetDrawer";
+import type { ProjectExpense } from "../types/projectExpense";
 
 export default function ProjectDetail() {
     const { id: projectId } = useParams();
@@ -29,11 +30,14 @@ export default function ProjectDetail() {
     const timeEntries = useBoundStore((s) => s.timeEntries);
     const isLoadingExpenses = useBoundStore((s) => s.isLoadingExpenses)
     const getExpensesByProject = useBoundStore((s) => s.getExpensesByProject);
-    const [showAddExpense, setShowAddExpense] = useState(false);
     const [showAddTeam, setShowAddTeam] = useState(false);
     const [showAddTime, setShowAddTime] = useState(false);
     const [showAddBudget, setShowAddBudget] = useState(false);
     const [open, setOpen] = useState(false);
+    const { deleteExpense, updateExpense } = useBoundStore();
+    const [editing, setEditing] = useState<ProjectExpense | null>(null);
+    const [expenseModalOpen, setExpenseModalOpen] = useState(false);
+
     useEffect(() => {
         if (projectId) {
             getProjects?.(1, 50);
@@ -85,6 +89,16 @@ export default function ProjectDetail() {
         void getExpensesByProject(projectId, 1, 20);
     };
 
+    const onEditExpense = (g: ProjectExpense) => {
+        setEditing(g);
+        setExpenseModalOpen(true);
+    };
+
+    const onDeleteExpense = async (id: string) => {
+        if (!confirm("¿Eliminar gasto?")) return;
+        await deleteExpense(id);
+        await getExpensesByProject(projectId, 1, 20);
+    };
     return (
         <AppLayout>
             {/* Header */}
@@ -100,7 +114,10 @@ export default function ProjectDetail() {
                 <div className="flex gap-2 ">
                     <button
                         className="px-3 py-2 rounded-lg bg-primary text-white text-sm font-semibold"
-                        onClick={() => setShowAddExpense(true)} // abre modal gasto
+                        onClick={() => {
+                            setEditing(null);
+                            setExpenseModalOpen(true);
+                        }} // abre modal gasto
                     >
                         + Añadir gasto
                     </button>
@@ -266,10 +283,11 @@ export default function ProjectDetail() {
                 </div>
             </div>
             <AddExpenseModal
-                open={showAddExpense}
-                onClose={() => setShowAddExpense(false)}
+                open={expenseModalOpen}
+                onClose={() => { setExpenseModalOpen(false); setEditing(null); }}
                 projectId={projectId!}
                 categories={["Materiales", "Mano de Obra", "Equipo", "Otros"]}
+                initialValues={editing}
             />
             <AddTeamModal
                 open={showAddTeam}
@@ -294,6 +312,8 @@ export default function ProjectDetail() {
                 expenses={expenses}
                 loading={isLoadingExpenses}
                 onClose={() => setOpen(false)}
+                onEdit={onEditExpense}
+                onDelete={onDeleteExpense}
             />
         </AppLayout>
     );
