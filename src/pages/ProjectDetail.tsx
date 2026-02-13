@@ -1,6 +1,6 @@
 // src/pages/ProjectDetail.tsx
 import { useEffect, useMemo, useState } from "react";
-import { Pencil, Calendar, MapPin, Phone, Mail, MessageSquareReply } from "lucide-react";
+import { Pencil, Calendar, MapPin, Phone, Mail, MessageSquareReply, BanknoteArrowDown } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useBoundStore } from "../store";
 import type { Project } from "../types/project";
@@ -34,7 +34,7 @@ export default function ProjectDetail() {
     const [showAddTime, setShowAddTime] = useState(false);
     const [showAddBudget, setShowAddBudget] = useState(false);
     const [open, setOpen] = useState(false);
-    const { deleteExpense, updateExpense } = useBoundStore();
+    const { deleteExpense } = useBoundStore();
     const [editing, setEditing] = useState<ProjectExpense | null>(null);
     const [expenseModalOpen, setExpenseModalOpen] = useState(false);
 
@@ -150,9 +150,11 @@ export default function ProjectDetail() {
                             </div>
                             <p className="text-sm text-slate-600 mt-2 leading-relaxed">{project.description || "Sin descripción"}</p>
 
-                            <div className="grid md:grid-cols-2 gap-3 mt-4 text-sm text-slate-700">
+                            <div className="grid md:grid-cols-4 gap-3 mt-4 text-sm text-slate-700">
                                 <InfoRow label="Tipo de Proyecto" value={project.category || "N/D"} />
+                                <InfoRow label="Fecha de Inicio" value={project.startDate || "N/D"} icon={<Calendar className="w-4 h-4" />} />
                                 <InfoRow label="Fecha Límite" value={project.dueDate || "N/D"} icon={<Calendar className="w-4 h-4" />} />
+                                <InfoRow label="Fecha de Cierre" value={project.endDate || "N/D"} icon={<Calendar className="w-4 h-4" />} />
                             </div>
                         </div>
                         <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-3">
@@ -228,7 +230,7 @@ export default function ProjectDetail() {
                                             if (!phoneForWhatsapp) return;
                                             window.open(`https://wa.me/${phoneForWhatsapp}`, "_blank");
                                         }}
-                                        className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-primary text-white font-semibold text-sm border border-orange-100">
+                                        className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-primary text-white font-semibold text-sm border border-orange-100 cursor-pointer">
                                         <MessageSquareReply className="w-4 h-4" />
                                         Enviar Mensaje
                                     </button>
@@ -239,7 +241,7 @@ export default function ProjectDetail() {
                         </div>
                         <div
                             onClick={openDrawer}
-                            className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-2 cursor-pointer hover:opacity-80">
+                            className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-2 ">
                             <h3 className="font-semibold text-slate-900">Presupuesto</h3>
                             <Row label="Presupuesto Total" value={totalBudget} color="text-slate-900" />
                             <Row label="Gastado" value={totalSpent} color="text-blue-600" />
@@ -257,6 +259,12 @@ export default function ProjectDetail() {
                                     </div>
                                 ))}
                             </div>
+                            <button
+
+                                className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-primary text-white font-semibold text-sm border border-orange-100 cursor-pointer">
+                                <BanknoteArrowDown className="w-4 h-4" />
+                                Ver Gastos
+                            </button>
                         </div>
 
                         <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-3">

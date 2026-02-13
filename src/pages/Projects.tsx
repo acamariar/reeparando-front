@@ -7,6 +7,7 @@ import type { Project } from "../types/project";
 import CreateProjectModal from "../components/project/CreateProjectModal";
 import { useNavigate } from "react-router-dom";
 import { CreateClientModal } from "../components/project/CreateClientModal";
+import { exportProjectsToXlsx } from "../helper/exportProjectsToXlsx";
 
 const categoryStyle = {
     impermeabilizacion: { bg: "bg-blue-100", fg: "text-blue-600", icon: <Droplets className="w-5 h-5" /> },
@@ -39,17 +40,28 @@ export default function ProjectsPage() {
     const [openModal, setOpenModal] = useState(false);
     const createProject = useBoundStore((s) => s.createProject);
     const isLoadingProjects = useBoundStore((s) => s.isLoadingProjects);
+    const getClients = useBoundStore(s => s.getClients);
+    const getEmployees = useBoundStore(s => s.getEmployees);
+    const clients = useBoundStore(s => s.clients);
+    const employees = useBoundStore(s => s.employees);
     const projectError = useBoundStore((s) => s.projectError);
     const [openClient, setOpenClient] = useState(false);
     const navigate = useNavigate();
     const goDetail = (id: string) => navigate(`/proyectos/${id}`);
     const [search, setSearch] = useState("");
-
+    const [startFrom, setStartFrom] = useState("");
+    const [startTo, setStartTo] = useState("");
 
     useEffect(() => {
-        const t = setTimeout(() => getProjects(page, pageSize, search), 300);
+        const t = setTimeout(() => {
+            getProjects(1, undefined, search || undefined, startFrom || undefined, startTo || undefined);
+        }, 300); // debounce 300ms
         return () => clearTimeout(t);
-    }, [page, pageSize, search, getProjects]);
+    }, [search, startFrom, startTo, getProjects]);
+    useEffect(() => {
+        getClients(1, 100)
+        getEmployees(1, 100)
+    }, [getClients, getEmployees]);
     const goPrev = () => {
         if (page > 1) getProjects?.(page - 1, pageSize);
     };
@@ -70,6 +82,10 @@ export default function ProjectsPage() {
         await getProjects?.(page, pageSize);
         setOpenModal(false);
     };
+    const handleExport = async () => {
+
+        exportProjectsToXlsx(projects, clients ?? [], employees ?? []);
+    }
     return (
         <AppLayout>
             <div className="space-y-4">
@@ -84,8 +100,26 @@ export default function ProjectsPage() {
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Buscar proyecto..."
-                            className="rounded-lg border w-96 border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary/20 mr-1.5"
+                            className="rounded-lg border w-96  border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary/20 mr-1.5"
                         />
+                        <input
+                            type="date"
+                            value={startFrom}
+                            onChange={(e) => setStartFrom(e.target.value)}
+                            className="h-10 rounded-lg border mr-2  border-slate-300 px-3 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
+                        />
+                        <input
+                            type="date"
+                            value={startTo}
+                            onChange={(e) => setStartTo(e.target.value)}
+                            className="h-10 rounded-lg border mr-2 border-slate-300 px-3 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
+                        />
+                        <button
+                            className="pinline-flex mr-1.5 items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-white hover:bg-primary/9"
+                            onClick={handleExport} // 'projects' es la lista filtrada que viene del store
+                        >
+                            Exportar Excel
+                        </button>
                         <button
                             className="inline-flex mr-1.5 items-center gap-2 px-3 py-2 rounded-lg bg-primary text-white hover:bg-primary/90"
                             onClick={() => setOpenModal(true)}
@@ -142,14 +176,9 @@ export default function ProjectsPage() {
 
                                     <div className="flex items-center justify-between">
                                         <div className="flex -space-x-2">
-                                            {(p.team ?? []).map((t) => (
-                                                <div
-                                                    key={t}
-                                                    className="w-8 h-8 rounded-full border-2 border-white bg-accent/80 text-white text-[11px] font-semibold flex items-center justify-center"
-                                                >
-                                                    {t}
-                                                </div>
-                                            ))}
+
+                                            <span className="text-slate-500 text-sm">Fecha de inicio: {p.startDate}</span>
+
                                         </div>
                                         <span className={`px-3 py-1 text-xs rounded-full ${st.bg} ${st.fg}`}>{p.status}</span>
                                     </div>

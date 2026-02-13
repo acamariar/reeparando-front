@@ -3,7 +3,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Modal } from "../UI/Modal";
-import type { ProjectCategory } from "../../types/project";
+import type { ProjectCategory, ProjectStatus } from "../../types/project";
 import { NumericFormat, type NumberFormatValues } from "react-number-format";
 import { useBoundStore } from "../../store";
 import { Select } from "../UI/Select";
@@ -18,6 +18,9 @@ type FormValues = {
     dueDate: string;
     description: string;
     team: string; // comma separated
+    status: ProjectStatus;
+    startDate: string;
+    endDate?: string;
 };
 
 type Props = {
@@ -35,6 +38,10 @@ const schema: yup.ObjectSchema<FormValues> = yup.object({
     dueDate: yup.string().required("Fecha requerida"),
     description: yup.string().default(""),
     team: yup.string().default(""),
+    startDate: yup.string().required("Fecha de inicio requerida"),
+    endDate: yup.string().nullable(),
+    status: yup.mixed<ProjectStatus>().oneOf(["EN_PROGRESO", "FINALIZADA", "ATRASADA", "GARANTIA"]).required(),
+
 });
 
 export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
@@ -54,6 +61,9 @@ export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
             category: "refaccion",
             budget: 0,
             dueDate: "",
+            startDate: "",
+            endDate: "",
+            status: "EN_PROGRESO",
             description: "",
             team: "",
         },
@@ -138,10 +148,22 @@ export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
                         {errors.budget && <p className="text-xs text-red-600">{errors.budget.message}</p>}
                     </label>
                     <label className="text-sm text-slate-600">
+                        Fecha de inicio
+                        <input
+                            type="date"
+                            {...register("startDate")}
+                            className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
+                        />
+                        {errors.startDate && (
+                            <p className="text-xs text-red-600">{errors.startDate.message}</p>
+                        )}
+                    </label>
+                    <label className="text-sm text-slate-600">
                         Fecha límite
                         <input type="date" {...register("dueDate")} className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100" />
                         {errors.dueDate && <p className="text-xs text-red-600">{errors.dueDate.message}</p>}
                     </label>
+
                     <Select
                         label="Equipo asignado"
                         value={teamIds}
@@ -154,6 +176,7 @@ export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
                     />
 
                 </div>
+
 
                 <label className="text-sm text-slate-600 block">
                     Descripción
