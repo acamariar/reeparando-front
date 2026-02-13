@@ -14,7 +14,7 @@ export type ProjectSlice = {
     isLoadingProjects: boolean;
     projectError: string | null;
     fetchProjectById: (id: string) => Promise<Project>;
-    getProjects: (page: number, limit?: number) => Promise<void>;
+    getProjects: (page: number, limit?: number, search?: string) => Promise<void>;
     createProject: (payload: Omit<Project, "id">) => Promise<Project>;
     updateProject: (id: string, payload: Partial<Project>) => Promise<Project>;
     deleteProject: (id: string) => Promise<void>;
@@ -47,12 +47,12 @@ export const createProjectSlice: StateCreator<
     isLoadingProjects: false,
     projectError: null,
 
-    getProjects: async (page, limit) => {
+    getProjects: async (page, limit, search) => {
         const size = limit ?? get().projectPageSize;
         set({ isLoadingProjects: true, projectError: null });
         try {
             const { data, headers } = await api.get<Project[]>("/proyectos", {
-                params: { _page: page, _limit: size, _sort: "id", _order: "desc" },
+                params: { _page: page, _limit: size, search, _sort: "id", _order: "desc" },
             });
             const totalItems = Number(headers["x-total-count"] ?? data.length);
             const totalPages = Math.max(1, Math.ceil(totalItems / size));

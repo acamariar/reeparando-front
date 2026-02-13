@@ -134,7 +134,7 @@ export default function Table({
                             aria-hidden="true"
                             className="mr-3 h-5 w-5 text-gray-400"
                         />
-                        Previous
+                        Anterior
                     </button>
                 </div>
                 <div className="hidden md:-mt-px md:flex">
@@ -146,7 +146,7 @@ export default function Table({
                                 onClick={() => setPage(p)}
                                 className={`inline-flex items-center border-t-2 pl-1 pt-4 text-sm font-medium 
         ${p === page
-                                        ? 'border-blue-500 text-blue-600'
+                                        ? 'border-primary text-primary'
                                         : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
                                     }`}
                             >
@@ -169,7 +169,7 @@ export default function Table({
                         }
                         className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                     >
-                        Next
+                        Siguiente
                         <ArrowLongRightIcon
                             aria-hidden="true"
                             className="ml-3 h-5 w-5 text-gray-400"

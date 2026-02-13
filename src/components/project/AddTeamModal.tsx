@@ -81,6 +81,7 @@ export default function AddTeamModal({ open, onClose, projectId, currentTeam }: 
                             onChange={(v: string) => field.onChange(v)}
                             options={options}
                             error={errors.employeeId?.message}
+                            searchable={true}
                         />
                     )}
                 />

@@ -43,13 +43,13 @@ export default function ProjectsPage() {
     const [openClient, setOpenClient] = useState(false);
     const navigate = useNavigate();
     const goDetail = (id: string) => navigate(`/proyectos/${id}`);
-
+    const [search, setSearch] = useState("");
 
 
     useEffect(() => {
-        getProjects?.(page, pageSize);
-    }, [page, getProjects, pageSize]);
-
+        const t = setTimeout(() => getProjects(page, pageSize, search), 300);
+        return () => clearTimeout(t);
+    }, [page, pageSize, search, getProjects]);
     const goPrev = () => {
         if (page > 1) getProjects?.(page - 1, pageSize);
     };
@@ -78,7 +78,14 @@ export default function ProjectsPage() {
                         <p className="text-sm text-slate-500">Proyectos</p>
                         <h1 className="text-2xl font-bold text-accent">Resumen</h1>
                     </div>
+
                     <div>
+                        <input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Buscar proyecto..."
+                            className="rounded-lg border w-96 border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary/20 mr-1.5"
+                        />
                         <button
                             className="inline-flex mr-1.5 items-center gap-2 px-3 py-2 rounded-lg bg-primary text-white hover:bg-primary/90"
                             onClick={() => setOpenModal(true)}

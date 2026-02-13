@@ -47,6 +47,7 @@ export default function PaymentsPage() {
 
     // Columnas que se mostrarán
     const tableInfo = {
+        Nombre: "employeeName",
         Fecha: "date",
         Tipo: "type",
         Monto: "amountFmt",

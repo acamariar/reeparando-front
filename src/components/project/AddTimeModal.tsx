@@ -26,6 +26,7 @@ export default function AddTimeModal({ open, onClose, projectId, teamIds }: Prop
     const createTime = useBoundStore((s) => s.createTime);
     const getTimeByProject = useBoundStore((s) => s.getTimeByProject);
     const updateEmployee = useBoundStore((s) => s.updateEmployee)
+    const createExpense = useBoundStore((s) => s.createExpense)
 
     const { control, handleSubmit, register, reset, formState: { isSubmitting } } = useForm<FormValues>({
         defaultValues: {
@@ -57,6 +58,7 @@ export default function AddTimeModal({ open, onClose, projectId, teamIds }: Prop
                 .map((e) => ({ value: e.id, label: `${e.firstName} ${e.lastName}` })),
         [employees, teamIds]
     );
+
 
     const onSubmit = async (values: FormValues) => {
         if (!values.employeeId) return;            // bloqueo mínimo

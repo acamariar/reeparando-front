@@ -13,7 +13,7 @@ type RedireactButtonProps = {
 const firstStyle =
     'inline-flex rounded-md bg-accent px-4 py-3 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600';
 const secondStyle =
-    'inline-flex items-center bg-secondary rounded-md  px-4 py-3 text-sm font-semibold text-white shadow-sm  hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white';
+    'inline-flex items-center bg-secondary rounded-md  px-4 py-3 text-sm font-semibold text-white shadow-sm   disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-white';
 export default function RedireactButton({
     to,
     text,

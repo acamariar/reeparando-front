@@ -48,7 +48,7 @@ export default function ExpensesDrawer({ open, expenses, loading, onClose }: Pro
                                 </div>
                                 <div className="text-xs text-slate-500">{g.date}</div>
                                 <div className="text-xs text-slate-500">{g.supplier}</div>
-                                <div className="text-xs text-slate-500">NF: {g.invoiceRef}</div>
+                                <div className="text-xs text-slate-500">FC: {g.invoiceRef}</div>
                                 {g.concept && (
                                     <div className="text-slate-600 mt-1">{g.concept}</div>
                                 )}

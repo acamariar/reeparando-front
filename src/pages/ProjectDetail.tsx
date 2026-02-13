@@ -111,7 +111,7 @@ export default function ProjectDetail() {
                         + Añadir personal
                     </button>
                     <button
-                        className="px-3 py-2 rounded-lg bg-green-600 text-white text-sm font-semibold"
+                        className="px-3 py-2 rounded-lg bg-secondary text-white text-sm font-semibold"
                         onClick={() => setShowAddBudget(true)} // abre modal presupuesto
                     >
                         + Añadir presupuesto
@@ -222,7 +222,7 @@ export default function ProjectDetail() {
                         </div>
                         <div
                             onClick={openDrawer}
-                            className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-2 ">
+                            className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm space-y-2 cursor-pointer hover:opacity-80">
                             <h3 className="font-semibold text-slate-900">Presupuesto</h3>
                             <Row label="Presupuesto Total" value={totalBudget} color="text-slate-900" />
                             <Row label="Gastado" value={totalSpent} color="text-blue-600" />
