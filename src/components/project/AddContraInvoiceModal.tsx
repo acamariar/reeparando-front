@@ -1,4 +1,5 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { NumericFormat, type NumberFormatValues } from "react-number-format";
 
 type Props = {
     open: boolean;
@@ -7,9 +8,10 @@ type Props = {
 };
 
 export default function AddContraInvoiceModal({ open, onClose, onSave }: Props) {
-    const { register, handleSubmit, reset } = useForm<{ amount: number; description: string; ref: string }>({
+    const { register, handleSubmit, reset, control, setValue } = useForm<{ amount: number; description: string; ref: string }>({
         defaultValues: { amount: 0, description: "", ref: "" },
     });
+    const amount = useWatch({ control, name: "amount" });
     if (!open) return null;
 
     const submit = handleSubmit(async (values) => {
@@ -26,13 +28,23 @@ export default function AddContraInvoiceModal({ open, onClose, onSave }: Props) 
                 </div>
                 <form className="space-y-4" onSubmit={submit}>
                     <div className="space-y-2">
-                        <label className="text-sm text-slate-600">Monto</label>
-                        <input
-                            type="number"
-                            step="0.01"
-                            className="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm"
-                            {...register("amount", { required: true, min: 0.01 })}
-                        />
+                        <label className="text-sm text-slate-700 block">
+                            Monto
+
+                            <NumericFormat
+                                thousandSeparator="."
+                                decimalSeparator=","
+                                allowNegative={false}
+                                inputMode="decimal"
+                                value={amount ?? 0}
+                                className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
+                                onValueChange={(v: NumberFormatValues) => {
+                                    setValue("amount", v.floatValue ?? 0, { shouldValidate: true });
+                                }}
+                                placeholder="$ 0.00"
+                            />
+
+                        </label>
                     </div>
                     <div className="space-y-2">
                         <label className="text-sm text-slate-600">Descripción</label>

@@ -19,6 +19,7 @@ import type { TimeEntry } from "../types/TimeEntry ";
 import EditTimeEntryModal from "../components/project/EditTimeEntryModal";
 import AddContraInvoiceModal from "../components/project/AddContraInvoiceModal";
 import PayContraInvoiceModal from "../components/project/PayContraInvoiceModal";
+import CreateProjectModal from "../components/project/CreateProjectModal";
 
 export default function ProjectDetail() {
     const { id: projectId } = useParams();
@@ -55,6 +56,8 @@ export default function ProjectDetail() {
     const updateExpense = useBoundStore((s) => s.updateExpense);   // PATCH /gastos/:id
     // estado nuevo (ya usas useState)
     const [showActions, setShowActions] = useState(false);
+    const [showEditProject, setShowEditProject] = useState(false);
+
 
     useEffect(() => {
         if (projectId) {
@@ -180,7 +183,8 @@ export default function ProjectDetail() {
                         <div className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm">
                             <div className="flex items-center justify-between">
                                 <h2 className="text-lg font-semibold text-slate-900">Información General</h2>
-                                <button className="text-slate-500 hover:text-slate-700">
+                                <button className="text-slate-500 hover:text-slate-700"
+                                    onClick={() => setShowEditProject(true)}>
                                     <Pencil className="w-4 h-4" />
                                 </button>
                             </div>
@@ -489,6 +493,29 @@ export default function ProjectDetail() {
                     await getProjects?.(1, 50);
                     setShowPayContraModal(false);
                 }} />
+            <CreateProjectModal
+                open={showEditProject}
+                mode="edit"
+                initialValues={{
+                    name: project.name,
+                    client: project.client,
+                    address: project.address,
+                    category: project.category,
+                    budget: project.budget ?? 0,
+                    dueDate: project.dueDate ?? "",
+                    startDate: project.startDate ?? "",
+                    endDate: project.endDate ?? "",
+                    status: project.status,
+                    description: project.description ?? "",
+
+                }}
+                onClose={() => setShowEditProject(false)}
+                onSubmit={async (values) => {
+                    await updateProject(projectId!, values); // tu acción patch
+                    await getProjects?.(1, 50);
+                    setShowEditProject(false);
+                }}
+            />
 
         </AppLayout>
     );

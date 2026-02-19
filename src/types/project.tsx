@@ -1,4 +1,4 @@
-export type ProjectCategory = "impermeabilizacion" | "refaccion" | "puesto de Trabajo" | "pintura";
+export type ProjectCategory = "impermeabilizacion" | "refaccion" | "puesto de Trabajo" | "pintura" | "contrafactura" | "contrafacturPagada";
 export type ProjectStatus = "EN_PROGRESO" | "FINALIZADA" | "ATRASADA" | "GARANTIA";
 
 export type Project = {

@@ -27,7 +27,10 @@ type Props = {
     open: boolean;
     onClose: () => void;
     onSubmit: (payload: Omit<FormValues, "team"> & { team: string[] }) => Promise<void> | void;
+    mode?: "create" | "edit";
+    initialValues?: Partial<FormValues>;
 };
+
 
 const schema: yup.ObjectSchema<FormValues> = yup.object({
     name: yup.string().required("Nombre requerido"),
@@ -39,18 +42,19 @@ const schema: yup.ObjectSchema<FormValues> = yup.object({
     description: yup.string().default(""),
     team: yup.string().default(""),
     startDate: yup.string().required("Fecha de inicio requerida"),
-    endDate: yup.string().nullable(),
+    endDate: yup.string().required("Fecha de fin requerida"),
     status: yup.mixed<ProjectStatus>().oneOf(["EN_PROGRESO", "FINALIZADA", "ATRASADA", "GARANTIA"]).required(),
 
 });
 
-export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
+export default function CreateProjectModal({ open, onClose, onSubmit, mode = "create", initialValues }: Props) {
     const employees = useBoundStore((s) => s.employees);
     const employeePage = useBoundStore((s) => s.employeePage);
     const employeeTotalItems = useBoundStore((s) => s.employeeTotalItems);
     const getEmployees = useBoundStore((s) => s.getEmployees);
     const clients = useBoundStore((s) => s.clients);
     const getClients = useBoundStore((s) => s.getClients);
+
 
     const { control, register, handleSubmit, reset, setValue, formState: { errors, isSubmitting } } = useForm<FormValues>({
         resolver: yupResolver(schema),
@@ -68,6 +72,26 @@ export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
             team: "",
         },
     });
+    useEffect(() => {
+        if (open && initialValues) {
+            reset({
+                name: initialValues.name ?? "",
+                client: initialValues.client ?? "",
+                address: initialValues.address ?? "",
+                category: initialValues.category ?? "refaccion",
+                budget: initialValues.budget ?? 0,
+                dueDate: initialValues.dueDate ?? "",
+                startDate: initialValues.startDate ?? "",
+                endDate: initialValues.endDate ?? "",
+                status: initialValues.status ?? "EN_PROGRESO",
+                description: initialValues.description ?? "",
+                team: (initialValues.team as unknown as string[])?.join(", ") ?? "",
+            });
+        }
+        if (!open) reset();
+    }, [open, initialValues, reset]);
+
+
 
     // usar useWatch en vez de watch
     const client = useWatch({ control, name: "client", defaultValue: "" });
@@ -100,7 +124,7 @@ export default function CreateProjectModal({ open, onClose, onSubmit }: Props) {
     }, [open, reset, getEmployees, employeePage, employeeTotalItems, getClients]);
 
     return (
-        <Modal open={open} onClose={onClose} title="Nuevo proyecto">
+        <Modal open={open} onClose={onClose} title={mode === "edit" ? "Editar proyecto" : "Nuevo proyecto"}>
             <form className="space-y-3" onSubmit={handleSubmit(submit)}>
                 <div className="grid grid-cols-2 gap-3">
                     <label className="text-sm text-slate-600">
