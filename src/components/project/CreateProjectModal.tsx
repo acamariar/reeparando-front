@@ -42,7 +42,7 @@ const schema: yup.ObjectSchema<FormValues> = yup.object({
     description: yup.string().default(""),
     team: yup.string().default(""),
     startDate: yup.string().required("Fecha de inicio requerida"),
-    endDate: yup.string().required("Fecha de fin requerida"),
+    endDate: yup.string().default(""),
     status: yup.mixed<ProjectStatus>().oneOf(["EN_PROGRESO", "FINALIZADA", "ATRASADA", "GARANTIA"]).required(),
 
 });
