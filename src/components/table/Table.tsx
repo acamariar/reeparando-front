@@ -12,10 +12,10 @@ type TableInfoType = {
 };
 
 type TableProps = {
-    items: ClientTypes | EmployeePayment;
+    items: Client[] | EmployeePayment[];
     tableInfo: TableInfoType | EmployeePayment[];
     onView?: () => void;
-    selectedItem?: React.Dispatch<React.SetStateAction<| Client>>;
+    selectedItem?: React.Dispatch<React.SetStateAction<Client>>;
     page: number;
     setPage: React.Dispatch<React.SetStateAction<number>>;
     redirectTo?: string;
@@ -23,6 +23,7 @@ type TableProps = {
     totalPages: number;
     children?: React.ReactNode;
     action: boolean
+    renderActions?: (item: Client | EmployeePayment) => React.ReactNode;
 };
 const getPages = (total: number, page: number) => {
     let pages: (number | string)[] = [];
@@ -49,7 +50,8 @@ export default function Table({
     redirectTo,
     totalPages,
     children,
-    action
+    action,
+    renderActions
 }: TableProps) {
     return (
         <div className="px-4 sm:px-6 lg:px-8">
@@ -104,20 +106,26 @@ export default function Table({
                                     );
                                 })}
                                 {action && (< td className="px-3 flex justify-end py-3.5 text-sm text-gray-500  border-t ">
-                                    <RedireactButton
-                                        onClick={() => {
-                                            selectedItem(item);
-                                            onView();
-                                        }}
-                                        to={onView ? undefined : `/${redirectTo}/${item.id}`}
-                                        text="Ver mas"
-                                        type="second"
-                                        withArrow
-                                    />
+                                    {renderActions ? (
+                                        renderActions(item)
+                                    ) :
+                                        <RedireactButton
+                                            onClick={() => {
+                                                selectedItem(item);
+                                                onView();
+                                            }}
+                                            to={onView ? undefined : `/${redirectTo}/${item.id}`}
+                                            text="Ver mas"
+                                            type="second"
+                                            withArrow
+                                        />
+                                    }
                                     {index === 0 ? (
                                         <div className="absolute -top-px left-0 right-6 h-px bg-gray-200" />
                                     ) : null}
                                 </td>)}
+
+
                             </tr>
                         ))}
                     </tbody>

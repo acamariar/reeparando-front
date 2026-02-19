@@ -1,5 +1,8 @@
-import { X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import type { Client } from "../../types/Client";
+import { CreateClientModal } from "./CreateClientModal";
+import { useState } from "react";
+import { useBoundStore } from "../../store";
 
 type Props = {
     open: boolean;
@@ -8,6 +11,10 @@ type Props = {
 };
 
 export default function ClientDrawer({ open, client, onClose }: Props) {
+    const [showEdit, setShowEdit] = useState(false);
+    const [drawerClient, setDrawerClient] = useState<Client | null>(null);
+    const updateClient = useBoundStore((s) => s.updateClient);
+    const getClients = useBoundStore((s) => s.getClients);
     return (
         <div
             className={`fixed inset-0 z-50 transition-opacity ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
@@ -31,9 +38,19 @@ export default function ClientDrawer({ open, client, onClose }: Props) {
                             {client ? `${client.firstName} ${client.lastName}` : "Cargando..."}
                         </h2>
                     </div>
-                    <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-700">
-                        <X className="w-5 h-5" />
-                    </button>
+                    <div>
+                        <button onClick={() => {
+                            setDrawerClient(client);
+                            setShowEdit(true);
+                        }} className="p-2 text-slate-500 hover:text-slate-700">
+                            <Pencil className="w-5 h-5" />
+                        </button>
+                        <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-700">
+                            <X className="w-5 h-5" />
+                        </button>
+
+                    </div>
+
                 </div>
 
                 <div className="p-4 space-y-3 text-sm text-slate-700 overflow-y-auto h-[calc(100%-56px)]">
@@ -55,6 +72,16 @@ export default function ClientDrawer({ open, client, onClose }: Props) {
                     )}
                 </div>
             </div>
+            <CreateClientModal
+                open={showEdit}
+                mode="edit"
+                initialValues={drawerClient ?? undefined}
+                onClose={() => setShowEdit(false)}
+                onSave={async (values) => {
+                    await updateClient(drawerClient!.id, values);
+                    await getClients(1, 50);
+                }}
+            />
         </div>
     );
 }

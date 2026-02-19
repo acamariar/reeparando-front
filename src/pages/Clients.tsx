@@ -23,7 +23,6 @@ export default function ClientsPage() {
     const [page, setPage] = useState(clientPage);
     const [openModal, setOpenModal] = useState(false);
     const [drawerClient, setDrawerClient] = useState<Client | null>(null);
-
     const [drawerOpen, setDrawerOpen] = useState(false);
 
     // Cargar cuando cambia la página
@@ -46,7 +45,6 @@ export default function ClientsPage() {
         Nombre: "name",
         Teléfono: "phone",
         Ciudad: "city",
-        DNI: "dni",
     };
 
 
@@ -73,11 +71,11 @@ export default function ClientsPage() {
 
                 {clientError && <div className="text-red-600 text-sm">{clientError}</div>}
                 <Table
-                    items={tableItems as ClientTypes}          // tu Table espera ClientTypes; es el mismo shape
+                    items={tableItems as Client[]}          // tu Table espera ClientTypes; es el mismo shape
                     tableInfo={tableInfo}
                     onView={() => setDrawerOpen(true)}
                     page={page}
-                    selectedItem={(c: Client | null) => setDrawerClient(c)}
+                    selectedItem={(c) => setDrawerClient(c as Client)}
                     setPage={setPage}
                     title="Clientes"
                     totalPages={clientTotalPages}
@@ -96,6 +94,7 @@ export default function ClientsPage() {
                 <CreateClientModal
                     open={openModal}
                     onClose={() => setOpenModal(false)} />
+
             </div>
         </AppLayout>
     );

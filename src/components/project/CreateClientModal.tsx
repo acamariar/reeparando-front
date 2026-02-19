@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useBoundStore } from "../../store";
 import { Modal } from "../UI/Modal";
+import { useEffect } from "react";
 // tu modal genérico
 
 type FormValues = {
@@ -23,9 +24,12 @@ type FormValues = {
 type Props = {
     open: boolean;
     onClose: () => void;
+    mode?: "create" | "edit";
+    initialValues?: Partial<FormValues>;
+    onSave?: (data: FormValues) => Promise<void> | void;
 };
 
-export function CreateClientModal({ open, onClose }: Props) {
+export function CreateClientModal({ open, onClose, mode = "create", initialValues, onSave }: Props) {
     const createClient = useBoundStore((s) => s.createClient);
     const {
         register,
@@ -33,30 +37,54 @@ export function CreateClientModal({ open, onClose }: Props) {
         formState: { isSubmitting },
         reset,
     } = useForm<FormValues>({
-        defaultValues: { firstName: "", lastName: "" },
+        defaultValues: initialValues ?? { firstName: "", lastName: "" },
     });
 
     const onSubmit = async (data: FormValues) => {
-        await createClient({
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phone: data.phone ?? "",
-            email: data.email ?? "",
-            address: data.address ?? "",
-            city: data.city ?? "",
-            state: data.state ?? "",
-            zip: data.zip ?? "",
-            dni: data.dni ?? "",
-            notes: data.notes ?? "",
-            createdAt: new Date().toISOString().slice(0, 10),
-            referenceMedium: data.referenceMedium ?? "",
-            generatedSale: data.generatedSale ?? ""
+        const fallback = async (payload: FormValues) => {
+            await createClient({
+                firstName: payload.firstName,
+                lastName: payload.lastName,
+                phone: payload.phone ?? "",
+                email: payload.email ?? "",
+                address: payload.address ?? "",
+                city: payload.city ?? "",
+                state: payload.state ?? "",
+                zip: payload.zip ?? "",
+                dni: payload.dni ?? "",
+                notes: payload.notes ?? "",
+                referenceMedium: payload.referenceMedium ?? "",
+                generatedSale: payload.generatedSale ?? "",
+                createdAt: new Date().toISOString().slice(0, 10),
+            });
+        };
 
-        });
+        const handler = onSave ?? fallback;
+        await handler(data);
         reset();
         onClose();
     };
 
+    useEffect(() => {
+        if (open) {
+            reset({
+                firstName: initialValues?.firstName ?? "",
+                lastName: initialValues?.lastName ?? "",
+                phone: initialValues?.phone ?? "",
+                email: initialValues?.email ?? "",
+                address: initialValues?.address ?? "",
+                city: initialValues?.city ?? "",
+                state: initialValues?.state ?? "",
+                zip: initialValues?.zip ?? "",
+                dni: initialValues?.dni ?? "",
+                notes: initialValues?.notes ?? "",
+                referenceMedium: initialValues?.referenceMedium ?? "",
+                generatedSale: initialValues?.generatedSale ?? "",
+            });
+        } else {
+            reset();
+        }
+    }, [open, initialValues, reset]);
     const inputCls =
         "w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100";
 
@@ -64,7 +92,7 @@ export function CreateClientModal({ open, onClose }: Props) {
         <Modal
             open={open}
             onClose={onClose}
-            title="Nuevo Cliente"
+            title={mode === "edit" ? "Editar cliente" : "Nuevo cliente"}
             footer={
                 <div className="flex justify-end gap-2">
                     <button className="px-3 py-2 rounded border" onClick={onClose}>

@@ -4,6 +4,8 @@ import AppLayout from "../layout/AppLayout";
 
 import { useBoundStore } from "../store";
 import Table from "../components/table/Table";
+import { TrashIcon } from "@heroicons/react/16/solid";
+import type { EmployeePayment } from "../types/EmployeePayment";
 
 
 export default function PaymentsPage() {
@@ -19,10 +21,15 @@ export default function PaymentsPage() {
         getEmployees
     } = useBoundStore();
 
+    const deletePayment = useBoundStore((s) => s.deletePayment);   // DELETE /pagos/:id
+
+
+
     const [page, setPage] = useState(paymentPage);
     const [search, setSearch] = useState("");
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
+
 
 
     useEffect(() => {
@@ -60,11 +67,17 @@ export default function PaymentsPage() {
         Monto: "amountFmt",
         Notas: "notes",
     };
+    const handleDelete = async (paymentId: string) => {
+        if (!confirm("¿Eliminar pago?")) return;
+        await deletePayment(paymentId);
+        await getPayments(page, paymentPageSize, search || undefined, from || undefined, to || undefined);
+    };
+
 
     return (
         <AppLayout>
             <div className="space-y-4">
-                <div className=" flex justify-between">
+                <div className=" lg:flex lg:justify-between ">
                     <div>
                         <p className="text-sm text-slate-500">Pagos</p>
                         <h1 className="text-2xl font-bold text-accent">Historial de pagos</h1>
@@ -96,19 +109,35 @@ export default function PaymentsPage() {
                 {paymentError && <div className="text-red-600 text-sm">{paymentError}</div>}
 
                 <Table
-                    items={tableItems as any}
+                    items={tableItems as EmployeePayment[]}
                     tableInfo={tableInfo}
                     page={page}
                     setPage={setPage}
                     totalPages={paymentTotalPages}
                     title="Pagos"
-                    action={false}
+                    action={true}
+                    renderActions={(item) => (
+                        <div className="flex gap-2 justify-end">
+
+                            <button
+                                className="text-red-600 hover:text-red-800"
+                                onClick={() => {
+
+                                    handleDelete(item.id);
+                                }}
+                                title="Eliminar pago"
+                            >
+                                <TrashIcon className="w-3.5 max-h-3.5" />
+                            </button>
+                        </div>
+                    )}
                 >
                     {isLoadingPayments && (
                         <p className="text-sm text-slate-500 px-3">Cargando pagos...</p>
                     )}
                 </Table>
             </div>
+
         </AppLayout>
     );
 }

@@ -13,6 +13,8 @@ export type EmployeePaymentSlice = {
     getPayments: (page: number, limit?: number, search?: string, from?: string, to?: string) => Promise<void>;
     getPaymentsByEmployee: (employeeId: string, projectId?: string, page?: number, limit?: number) => Promise<void>;
     createPayment: (payload: Omit<EmployeePayment, "id">) => Promise<EmployeePayment>;
+    updatePayment: (id: string, payload: Partial<EmployeePayment>) => Promise<EmployeePayment>;
+    deletePayment: (id: string) => Promise<void>;
 };
 
 export const createEmployeePaymentSlice: StateCreator<
@@ -84,5 +86,20 @@ export const createEmployeePaymentSlice: StateCreator<
         const { data } = await api.post<EmployeePayment>("/pagosPersonal", { ...payload, });
         set((s) => ({ payments: [...s.payments, data] }));
         return data;
+    },
+    updatePayment: async (id, payload) => {
+        const { data } = await api.patch<EmployeePayment>(`/pagosPersonal/${id}`, payload);
+        set({
+            payments: get().payments.map((p) => (p.id === id ? { ...p, ...data } : p)),
+        });
+        return data;
+    },
+
+    deletePayment: async (id) => {
+        await api.delete(`/pagosPersonal/${id}`);
+        set({
+            payments: get().payments.filter((p) => p.id !== id),
+            paymentTotalItems: Math.max(0, get().paymentTotalItems - 1),
+        });
     },
 });
