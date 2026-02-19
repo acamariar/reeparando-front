@@ -33,7 +33,7 @@ type Props = {
     initialValues?: ProjectExpense | null;
 };
 
-export default function AddExpenseModal({ open, onClose, projectId, categories = ["Materiales", "Mano de Obra", "Equipo", "Otros"], initialValues }: Props) {
+export default function AddExpenseModal({ open, onClose, projectId, categories = ["Materiales", "Mano de Obra", "Equipo", "Otros", "Contrafactura", "ContrafacturaPagada"], initialValues }: Props) {
     const { updateExpense, getExpensesByProject } = useBoundStore()
     const createExpense = useBoundStore((s) => s.createExpense); // del slice de gastos
 

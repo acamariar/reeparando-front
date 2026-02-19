@@ -115,7 +115,7 @@ export default function ProjectsPage() {
                             className="h-10 rounded-lg border mr-2 border-slate-300 px-3 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
                         />
                         <button
-                            className="pinline-flex mr-1.5 items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-white hover:bg-primary/9"
+                            className="pinline-flex mr-1.5 items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-white hover:bg-secondary/90"
                             onClick={handleExport} // 'projects' es la lista filtrada que viene del store
                         >
                             Exportar Excel

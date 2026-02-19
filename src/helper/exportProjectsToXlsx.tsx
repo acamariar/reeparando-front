@@ -21,7 +21,7 @@ export function exportProjectsToXlsx(
     );
 
     const rows = projects.map((p) => {
-        const clientKey = String((p as any).clientId ?? (p as any).client ?? "");
+        const clientKey = String((p as Project).client ?? "");
         return {
             Nombre: p.name,
             Cliente: clientMap[clientKey] ?? clientKey, // usa nombre si lo encuentra

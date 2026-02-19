@@ -24,7 +24,7 @@ export default function AppLayout({ children }: appLayoutProps) {
             {/* Sidebar */}
             <aside className="w-64 bg-primary text-slate-100 flex flex-col">
                 <div className="p-6 flex items-center gap-3 border-b border-slate-800">
-                    <div className="bg-secondary w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">CV</div>
+                    <div className="bg-secondary w-10 h-10 rounded-full flex items-center justify-center text-white font-bold">REE</div>
                     <div>
                         <p className="font-semibold">Reeparando</p>
                         <p className="text-xs text-slate-400">Sistema Administrativo</p>
