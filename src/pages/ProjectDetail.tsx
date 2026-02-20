@@ -12,7 +12,7 @@ import AddTeamModal from "../components/project/AddTeamModal";
 import AddTimeModal from "../components/project/AddTimeModal";
 import AddBudgetModal from "../components/project/AddBudgetModal";
 import ExpensesDrawer from "../components/project/BudgetDrawer";
-import type { ProjectExpense } from "../types/projectExpense";
+
 import StatusModal from "../components/project/StatusModal";
 import CloseDateModal from "../components/project/CloseDateModal";
 import type { TimeEntry } from "../types/TimeEntry ";
@@ -20,6 +20,7 @@ import EditTimeEntryModal from "../components/project/EditTimeEntryModal";
 import AddContraInvoiceModal from "../components/project/AddContraInvoiceModal";
 import PayContraInvoiceModal from "../components/project/PayContraInvoiceModal";
 import CreateProjectModal from "../components/project/CreateProjectModal";
+import type { ProjectExpense } from "../types/ProjectExpense";
 
 export default function ProjectDetail() {
     const { id: projectId } = useParams();
@@ -116,9 +117,11 @@ export default function ProjectDetail() {
     };
     const facturaPendiente = expenses.filter((e) => e.category === "Contrafactura");
     const factuPen = facturaPendiente.map((e) => e.amount ?? 0).reduce((a, b) => a + b, 0);
-    console.log("Total de contrafacturas pendientes:", factuPen);
 
+    const expensesEmployes = expenses.filter(e => e.category === "Personal" && e.projectId === projectId);
+    const totalExpenses = expensesEmployes.reduce((sum, e) => sum + (e.amount ?? 0), 0);
 
+    console.log("Total gastos de personal:", totalExpenses);
 
 
 
@@ -316,8 +319,11 @@ export default function ProjectDetail() {
                             <h3 className="font-semibold text-slate-900">Presupuesto</h3>
                             <Row label="Presupuesto Total" value={totalBudget} color="text-slate-900" />
                             <Row label="Gastado" value={totalSpent} color="text-blue-600" />
-                            <Row label="Restante" value={remaining} color="text-green-600" />
+
+
                             <Row label="contra Factura" value={factuPen} color="text-red-600" />
+                            <Row label="Personal" value={totalExpenses} color="text-slate-700" />
+                            <Row label="Restante" value={remaining} color="text-green-600" />
                             <div className="mt-2 h-2 rounded-full bg-slate-200">
                                 <div className="h-2 rounded-full bg-primary" style={{ width: `${usedPct}%` }} />
                             </div>

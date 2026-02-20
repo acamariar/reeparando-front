@@ -1,6 +1,7 @@
 import type { StateCreator } from "zustand";
 import api from "../axios/mainAxios";
-import type { ProjectExpense } from "../types/projectExpense";
+import type { ProjectExpense } from "../types/ProjectExpense"
+
 
 
 export type ProjectExpenseSlice = {

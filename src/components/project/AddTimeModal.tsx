@@ -28,6 +28,7 @@ export default function AddTimeModal({ open, onClose, projectId, teamIds }: Prop
     const updateEmployee = useBoundStore((s) => s.updateEmployee)
     const createExpense = useBoundStore((s) => s.createExpense)
 
+
     const { control, handleSubmit, register, reset, formState: { isSubmitting } } = useForm<FormValues>({
         defaultValues: {
             employeeId: "",
@@ -41,6 +42,7 @@ export default function AddTimeModal({ open, onClose, projectId, teamIds }: Prop
     useEffect(() => {
         if (open) {
             getEmployees?.(1, 200).catch(() => { });
+
             reset({
                 employeeId: "",
                 date: new Date().toISOString().slice(0, 10),
@@ -60,12 +62,14 @@ export default function AddTimeModal({ open, onClose, projectId, teamIds }: Prop
     );
 
 
+
     const onSubmit = async (values: FormValues) => {
         if (!values.employeeId) return;            // bloqueo mínimo
         const hours = values.hours ?? 0;
         const amount = values.amount ?? 0;
         const emp = employees.find(e => e.id === values.employeeId);
         const add = Number(values.amount ?? 0);
+        const employeeName = emp ? `${emp.firstName} ${emp.lastName}` : "Empleado desconocido";
         await createTime({
             projectId,
             employeeId: values.employeeId,
@@ -77,6 +81,16 @@ export default function AddTimeModal({ open, onClose, projectId, teamIds }: Prop
         if (emp && add) {
             await updateEmployee(values.employeeId, { saldoActual: (emp.saldoActual ?? 0) + add });
         }
+        // 2) crea el gasto asociado
+        await createExpense({
+            projectId,
+            category: "Personal",          // o "Horas"
+            amount: values.amount,
+            concept: `Horas ${values.hours}h - ${employeeName}`,
+            date: values.date,
+            invoiceRef: Math.random().toString(36).substring(2, 8).toUpperCase()   // referencia aleatoria para identificar el gasto asociado a esta hora
+
+        })
         await getTimeByProject(projectId, 1, 200);
         await getEmployees?.(1, 100);
         onClose();
