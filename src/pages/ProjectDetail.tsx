@@ -364,7 +364,7 @@ export default function ProjectDetail() {
                 open={expenseModalOpen}
                 onClose={() => { setExpenseModalOpen(false); setEditing(null); }}
                 projectId={projectId!}
-                categories={["Materiales", "Mano de Obra", "Equipo", "Otros"]}
+                categories={["Materiales", "Mano de Obra", "Equipo", "Traslado (Uber, transporte...) ", "Otros"]}
                 initialValues={editing}
             />
             <AddTeamModal
