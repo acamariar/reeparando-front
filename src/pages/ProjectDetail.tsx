@@ -1,6 +1,6 @@
 // src/pages/ProjectDetail.tsx
 import { useEffect, useMemo, useState } from "react";
-import { Pencil, Calendar, MapPin, Phone, Mail, MessageSquareReply, BanknoteArrowDown, Trash2 } from "lucide-react";
+import { Pencil, Calendar, MapPin, Phone, Mail, MessageSquareReply, BanknoteArrowDown, Trash2, Notebook } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useBoundStore } from "../store";
 import type { Project, ProjectStatus } from "../types/project";
@@ -21,6 +21,8 @@ import AddContraInvoiceModal from "../components/project/AddContraInvoiceModal";
 import PayContraInvoiceModal from "../components/project/PayContraInvoiceModal";
 import CreateProjectModal from "../components/project/CreateProjectModal";
 import type { ProjectExpense } from "../types/ProjectExpense";
+import AddToolsModal from "../components/project/AddToolsModal";
+import BudgetPhotoModal from "../components/project/addImage";
 
 export default function ProjectDetail() {
     const { id: projectId } = useParams();
@@ -58,8 +60,8 @@ export default function ProjectDetail() {
     // estado nuevo (ya usas useState)
     const [showActions, setShowActions] = useState(false);
     const [showEditProject, setShowEditProject] = useState(false);
-
-
+    const [isModalOpen, setModalOpen] = useState(false); // para el modal de herramientas
+    const [isPhotoOpen, setPhotoOpen] = useState(false); // para el modal de foto presupuesto
     useEffect(() => {
         if (projectId) {
             getProjects?.(1, 50);
@@ -121,9 +123,9 @@ export default function ProjectDetail() {
     const expensesEmployes = expenses.filter(e => e.category === "Personal" && e.projectId === projectId);
     const totalExpenses = expensesEmployes.reduce((sum, e) => sum + (e.amount ?? 0), 0);
 
-    console.log("Total gastos de personal:", totalExpenses);
 
 
+    console.log("presupuesto:", project.budgetphoto)
 
 
 
@@ -142,13 +144,16 @@ export default function ProjectDetail() {
                 </div>
 
                 {/* Botones completos solo en md+ */}
-                <div className="hidden md:grid grid-cols-3 lg:grid-cols-6 gap-2">
+                <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-2">
                     <button className="h-9 rounded-lg bg-primary text-white text-sm font-semibold" onClick={() => { setEditing(null); setExpenseModalOpen(true); }}>+ Añadir gasto</button>
                     <button className="h-9 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800" onClick={() => setShowAddTeam(true)}>+ Añadir personal</button>
                     <button className="h-9 rounded-lg bg-secondary text-white text-sm font-semibold" onClick={() => setShowAddBudget(true)}>+ Añadir presupuesto</button>
                     <button className="h-9 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800" onClick={() => setShowStatusModal(true)}>Cambiar estado</button>
-                    <button className="h-9 rounded-lg bg-primary text-white text-sm font-semibold" onClick={() => setShowContraModal(true)}>Agregar contrafactura</button>
-                    <button className="h-9 rounded-lg border border-slate-200 text-sm font-semibold text-slate-800" onClick={() => setShowPayContraModal(true)}>Pagar contrafactura</button>
+                    <button className="h-9 rounded-lg bg-white  border border-slate-200 text-slate-800 text-sm font-semibold" onClick={() => setShowContraModal(true)}>Agregar contrafactura</button>
+                    <button className="h-9 rounded-lg border   bg-secondary border-slate-200 text-sm font-semibold text-white" onClick={() => setShowPayContraModal(true)}>Pagar contrafactura</button>
+                    <button className="h-9 rounded-lg bg-white  border border-slate-200 text-slate-800 text-sm font-semibold" onClick={() => setModalOpen(true)}>Agregar herramientas</button>
+                    <button className="h-9 rounded-lg bg-primary text-white text-sm font-semibold" onClick={() => setPhotoOpen(true)}>Cargar Presupuesto</button>
+
                 </div>
 
                 {/* Hamburguesa solo en mobile */}
@@ -298,6 +303,13 @@ export default function ProjectDetail() {
                                         <div className="flex items-start gap-2 text-slate-700">
                                             <MapPin className="w-4 h-4 text-slate-500 mt-0.5" />
                                             <span>{client.address}, {client.city}, {client.state}</span>
+                                        </div>
+                                        <div className="flex items-start gap-2 text-slate-700">
+                                            <Notebook className="w-4 h-4 text-slate-500 mt-0.5" />
+
+                                            <a href={project.budgetphoto} target="_blank" className="hover:underline">
+                                                Ver Presupuesto
+                                            </a>
                                         </div>
                                     </div>
 
@@ -521,6 +533,23 @@ export default function ProjectDetail() {
                     await getProjects?.(1, 50);
                     setShowEditProject(false);
                 }}
+            />
+            <AddToolsModal
+                open={isModalOpen}
+                onClose={() => setModalOpen(false)}
+                projectId={project.id}
+                initialTools={project.tools ?? []}
+                updateProject={updateProject}
+
+            />
+            <BudgetPhotoModal
+                open={isPhotoOpen}
+                onClose={() => setPhotoOpen(false)}
+                projectId={project.id}
+                initialUrl={project.budgetphoto ?? ""}
+                updateProject={updateProject}
+                cloudName={import.meta.env.VITE_CLOUDINARY_CLOUD}
+                uploadPreset={import.meta.env.VITE_CLOUDINARY_PRESET}
             />
 
         </AppLayout>

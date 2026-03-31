@@ -38,7 +38,9 @@ export const createProjectSlice: StateCreator<
         description: "",
         team: [],
         category: "impermeabilizacion",
-        startDate: ""
+        startDate: "",
+        tools: [],
+        budgetphoto: "",
     },
     projectPage: 1,
     projectPageSize: 6,

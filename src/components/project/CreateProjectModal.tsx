@@ -9,30 +9,7 @@ import { useBoundStore } from "../../store";
 import { Select } from "../UI/Select";
 import type { Employee } from "../../types/Employee";
 
-type FormValues = {
-    name: string;
-    client: string;
-    address: string;
-    category: ProjectCategory;
-    budget: number;
-    dueDate: string;
-    description: string;
-    team: string; // comma separated
-    status: ProjectStatus;
-    startDate: string;
-    endDate?: string;
-};
-
-type Props = {
-    open: boolean;
-    onClose: () => void;
-    onSubmit: (payload: Omit<FormValues, "team"> & { team: string[] }) => Promise<void> | void;
-    mode?: "create" | "edit";
-    initialValues?: Partial<FormValues>;
-};
-
-
-const schema: yup.ObjectSchema<FormValues> = yup.object({
+const schema = yup.object({
     name: yup.string().required("Nombre requerido"),
     client: yup.string().required("Cliente requerido"),
     address: yup.string().required("Dirección requerida"),
@@ -44,8 +21,19 @@ const schema: yup.ObjectSchema<FormValues> = yup.object({
     startDate: yup.string().required("Fecha de inicio requerida"),
     endDate: yup.string().default(""),
     status: yup.mixed<ProjectStatus>().oneOf(["EN_PROGRESO", "FINALIZADA", "ATRASADA", "GARANTIA"]).required(),
+    tools: yup.array().of(yup.string()).default([]).defined(),
 
-});
+}).required();
+
+type FormValues = yup.InferType<typeof schema>;
+
+type Props = {
+    open: boolean;
+    onClose: () => void;
+    onSubmit: (payload: Omit<FormValues, "team"> & { team: string[] }) => Promise<void> | void;
+    mode?: "create" | "edit";
+    initialValues?: Partial<FormValues>;
+};
 
 export default function CreateProjectModal({ open, onClose, onSubmit, mode = "create", initialValues }: Props) {
     const employees = useBoundStore((s) => s.employees);
@@ -70,6 +58,7 @@ export default function CreateProjectModal({ open, onClose, onSubmit, mode = "cr
             status: "EN_PROGRESO",
             description: "",
             team: "",
+            tools: [],
         },
     });
     useEffect(() => {
@@ -86,6 +75,8 @@ export default function CreateProjectModal({ open, onClose, onSubmit, mode = "cr
                 status: initialValues.status ?? "EN_PROGRESO",
                 description: initialValues.description ?? "",
                 team: (initialValues.team as unknown as string[])?.join(", ") ?? "",
+                tools: initialValues.tools ?? [],
+
             });
         }
         if (!open) reset();
@@ -101,6 +92,7 @@ export default function CreateProjectModal({ open, onClose, onSubmit, mode = "cr
     const submit = async (values: FormValues) => {
         await onSubmit({
             ...values,
+            tools: [], // por ahora vacío, se edita aparte
             team: values.team
                 .split(",")
                 .map((t) => t.trim())
