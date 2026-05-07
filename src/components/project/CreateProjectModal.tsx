@@ -112,7 +112,7 @@ export default function CreateProjectModal({ open, onClose, onSubmit, mode = "cr
     useEffect(() => {
         if (!open) reset();
         if (open) getEmployees(employeePage, employeeTotalItems).catch(() => { });
-        if (open) getClients(1, 50).catch(() => { });
+        if (open) getClients(1, 800).catch(() => { });
     }, [open, reset, getEmployees, employeePage, employeeTotalItems, getClients]);
 
     return (
@@ -130,6 +130,7 @@ export default function CreateProjectModal({ open, onClose, onSubmit, mode = "cr
                         onChange={(v) => setValue("client", v, { shouldValidate: true, shouldDirty: true })}
                         options={clientOptions}
                         error={errors.client?.message}
+                        searchable={true}
 
                     />
                     <label className="text-sm text-slate-600 col-span-2">

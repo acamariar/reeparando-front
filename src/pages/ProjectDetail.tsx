@@ -304,7 +304,7 @@ export default function ProjectDetail() {
                                             <MapPin className="w-4 h-4 text-slate-500 mt-0.5" />
                                             <span>{client.address}, {client.city}, {client.state}</span>
                                         </div>
-                                        <div className="flex items-start gap-2 text-slate-700">
+                                        <div className="flex items-start gap-2 text-slate-700 cursor-pointer">
                                             <Notebook className="w-4 h-4 text-slate-500 mt-0.5" />
 
                                             <a href={project.budgetphoto} target="_blank" className="hover:underline">
