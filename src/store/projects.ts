@@ -18,6 +18,7 @@ export type ProjectSlice = {
     createProject: (payload: Omit<Project, "id">) => Promise<Project>;
     updateProject: (id: string, payload: Partial<Project>) => Promise<Project>;
     deleteProject: (id: string) => Promise<void>;
+    setProjectPage: (page: number) => void;
 };
 
 export const createProjectSlice: StateCreator<
@@ -43,7 +44,7 @@ export const createProjectSlice: StateCreator<
         budgetphoto: "",
     },
     projectPage: 1,
-    projectPageSize: 6,
+    projectPageSize: 600,
     projectTotalPages: 1,
     projectTotalItems: 0,
     projects: [],
@@ -114,4 +115,5 @@ export const createProjectSlice: StateCreator<
         await api.delete(`/proyectos/${id}`);
         set({ projects: get().projects.filter((p) => p.id !== id) });
     },
+    setProjectPage: (page) => set({ projectPage: page }),
 });

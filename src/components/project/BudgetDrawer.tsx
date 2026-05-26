@@ -1,6 +1,7 @@
 // src/components/project/ExpensesDrawer.tsx
 import { Pencil, Trash2, X } from "lucide-react";
-import type { ProjectExpense } from "../../types/projectExpense";
+import type { ProjectExpense } from "../../types/ProjectExpense";
+
 
 type Props = {
     open: boolean;
@@ -13,7 +14,7 @@ type Props = {
 
 export default function ExpensesDrawer({ open, expenses, loading, onClose, onDelete, onEdit }: Props) {
 
-
+    console.log(expenses)
     return (
         <div
             className={`fixed inset-0 z-50 transition-opacity ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"

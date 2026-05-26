@@ -28,7 +28,7 @@ export const createEmployeeSlice: StateCreator<
     employees: [],
     isLoadingEmployees: false,
     employeePage: 1,
-    employeePageSize: 10,
+    employeePageSize: 100,
     employeeTotalPages: 1,
     employeeTotalItems: 0,
     employeeError: null,

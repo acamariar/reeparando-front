@@ -51,23 +51,28 @@ export default function ProjectsPage() {
     const [search, setSearch] = useState("");
     const [startFrom, setStartFrom] = useState("");
     const [startTo, setStartTo] = useState("");
+    const setProjectPage = useBoundStore((s) => s.setProjectPage);
 
-    useEffect(() => {
-        const t = setTimeout(() => {
-            getProjects(1, undefined, search || undefined, startFrom || undefined, startTo || undefined);
-        }, 300); // debounce 300ms
-        return () => clearTimeout(t);
-    }, [search, startFrom, startTo, getProjects]);
     useEffect(() => {
         getClients(1, 100)
         getEmployees(1, 100)
     }, [getClients, getEmployees]);
-    const goPrev = () => {
-        if (page > 1) getProjects?.(page - 1, pageSize);
-    };
-    const goNext = () => {
-        if (page < totalPages) getProjects?.(page + 1, pageSize);
-    };
+    useEffect(() => {
+        const t = setTimeout(() => {
+            getProjects(
+                page,
+                pageSize,
+                search || undefined,
+                startFrom || undefined,
+                startTo || undefined
+            );
+        }, 300);
+
+        return () => clearTimeout(t);
+    }, [page, pageSize, search, startFrom, startTo, getProjects]);
+
+
+
     const safeProjects = projects.map((p) => ({
         ...p,
         budget: Number.isFinite(p.budget) ? p.budget : 0,
@@ -86,6 +91,16 @@ export default function ProjectsPage() {
 
         exportProjectsToXlsx(projects, clients ?? [], employees ?? []);
     }
+    const goPrev = () => {
+        if (page > 1) {
+            setProjectPage(page - 1);
+        }
+    };
+    const goNext = () => {
+        if (page < totalPages) {
+            setProjectPage(page + 1);
+        }
+    };
     return (
         <AppLayout>
             <div className="space-y-4">
@@ -143,7 +158,7 @@ export default function ProjectsPage() {
                             return (
                                 <div key={p.id}
                                     onClick={() => goDetail(p.id)}
-                                    className="bg-white border border-slate-100 shadow-sm rounded-2xl p-4 space-y-3">
+                                    className={`${p.status === "FINALIZADA" ? "bg-red-500/6 " : "bg-white"} border border-slate-100 shadow-sm rounded-2xl p-4 space-y-3`}>
                                     <div className="flex items-start justify-between">
                                         <div className="flex items-center gap-2">
                                             <span className={`w-10 h-10 rounded-xl flex items-center justify-center ${cat.bg} ${cat.fg}`}>
@@ -203,7 +218,7 @@ export default function ProjectsPage() {
                     </span>
                     <button
                         onClick={goNext}
-                        disabled={page >= totalPages}
+
                         className="px-3 py-1.5 rounded-lg border border-slate-200 disabled:opacity-50"
                     >
                         Siguiente

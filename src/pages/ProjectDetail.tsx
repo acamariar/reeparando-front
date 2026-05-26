@@ -64,10 +64,10 @@ export default function ProjectDetail() {
     const [isPhotoOpen, setPhotoOpen] = useState(false); // para el modal de foto presupuesto
     useEffect(() => {
         if (projectId) {
-            getProjects?.(1, 50);
-            getClients?.(1, 50);
-            getEmployees?.(1, 50);
-            getExpensesByProject?.(projectId, 1, 100);
+            getProjects?.(1, 500);
+            getClients?.(1, 500);
+            getEmployees?.(1, 500);
+            getExpensesByProject?.(projectId, 1, 400);
             if (projectId) getTimeByProject(projectId, 1, 200).catch(() => { });
         }
     }, [projectId, getProjects, getClients, getEmployees, getExpensesByProject, getTimeByProject]);
@@ -104,7 +104,7 @@ export default function ProjectDetail() {
 
     const openDrawer = () => {
         setOpen(true);
-        void getExpensesByProject(projectId, 1, 20);
+        void getExpensesByProject(projectId, 1, 400);
     };
 
     const onEditExpense = (g: ProjectExpense) => {

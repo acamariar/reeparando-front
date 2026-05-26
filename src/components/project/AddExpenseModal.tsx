@@ -124,6 +124,7 @@ export default function AddExpenseModal({ open, onClose, projectId, categories =
                 </div>
             }
         >
+
             <div className="space-y-3">
                 <label className="text-sm text-slate-700 block">
                     Concepto
@@ -191,6 +192,7 @@ export default function AddExpenseModal({ open, onClose, projectId, categories =
                         className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-2 focus:ring-blue-100"
                     />
                 </label>
+                {errors && <p className="text-xs text-red-600">{errors.invoiceRef?.message}</p>}
             </div>
         </Modal>
     );

@@ -28,7 +28,7 @@ export const createProjectExpenseSlice: StateCreator<
 > = (set, get) => ({
     expenses: [],
     expensePage: 1,
-    expensePageSize: 10,
+    expensePageSize: 400,
     expenseTotalPages: 1,
     expenseTotalItems: 0,
     expensesTotalAmount: 0,
