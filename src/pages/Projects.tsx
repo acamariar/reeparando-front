@@ -57,6 +57,7 @@ export default function ProjectsPage() {
         getClients(1, 100)
         getEmployees(1, 100)
     }, [getClients, getEmployees]);
+
     useEffect(() => {
         const t = setTimeout(() => {
             getProjects(
