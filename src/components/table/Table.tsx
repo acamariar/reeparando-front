@@ -3,27 +3,29 @@ import {
     ArrowLongRightIcon,
 } from '@heroicons/react/16/solid';
 import RedireactButton from '../UI/RedireactButton';
-import type { Client } from '../../types/Client';
-import type { EmployeePayment } from '../../types/EmployeePayment';
-
 
 type TableInfoType = {
     [key: string]: string;
 };
 
+type TableRow = {
+    id: string;
+    [key: string]: unknown;
+};
+
 type TableProps = {
-    items: Client[] | EmployeePayment[];
-    tableInfo: TableInfoType | EmployeePayment[];
+    items: TableRow[];
+    tableInfo: TableInfoType;
     onView?: () => void;
-    selectedItem?: React.Dispatch<React.SetStateAction<Client>>;
+    selectedItem?: (item: TableRow) => void;
     page: number;
-    setPage: React.Dispatch<React.SetStateAction<number>>;
+    setPage: (page: number) => void;
     redirectTo?: string;
     title: string;
     totalPages: number;
     children?: React.ReactNode;
-    action: boolean
-    renderActions?: (item: Client | EmployeePayment) => React.ReactNode;
+    action: boolean;
+    renderActions?: (item: TableRow) => React.ReactNode;
 };
 const getPages = (total: number, page: number) => {
     let pages: (number | string)[] = [];
@@ -86,19 +88,17 @@ export default function Table({
                     <tbody>
                         {items.map((item, index) => (
                             <tr key={item.id + index}>
-                                {Object.values(tableInfo).map((value: string) => {
+                                {Object.values(tableInfo).map((value: string, colIndex: number) => {
+                                    const raw = item[value];
                                     let content = '';
-                                    if (
-                                        typeof item[value] == 'object' &&
-                                        Array.isArray(item[value])
-                                    ) {
-                                        content = item[value].map((i) => `${i}`).join(',');
-                                    } else {
-                                        content = item[value];
+                                    if (Array.isArray(raw)) {
+                                        content = raw.map((i) => `${i}`).join(',');
+                                    } else if (raw != null) {
+                                        content = String(raw);
                                     }
                                     return (
                                         <td
-                                            key={item.id}
+                                            key={`${item.id}-${value}-${colIndex}`}
                                             className=" px-3 py-3.5 text-sm text-left text-gray-500 border-t"
                                         >
                                             {content}
@@ -111,10 +111,10 @@ export default function Table({
                                     ) :
                                         <RedireactButton
                                             onClick={() => {
-                                                selectedItem(item);
-                                                onView();
+                                                selectedItem?.(item);
+                                                onView?.();
                                             }}
-                                            to={onView ? undefined : `/${redirectTo}/${item.id}`}
+                                            to={!onView && redirectTo ? `/${redirectTo}/${item.id}` : undefined}
                                             text="Ver mas"
                                             type="second"
                                             withArrow
@@ -135,7 +135,7 @@ export default function Table({
             <nav className="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
                 <div className="-mt-px flex w-0 flex-1">
                     <button
-                        onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                        onClick={() => setPage(page > 1 ? page - 1 : 1)}
                         className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                     >
                         <ArrowLongLeftIcon
@@ -173,7 +173,7 @@ export default function Table({
                 <div className="-mt-px flex w-0 flex-1 justify-end">
                     <button
                         onClick={() =>
-                            setPage((prev) => (prev < totalPages ? prev + 1 : prev))
+                            setPage(page < totalPages ? page + 1 : totalPages)
                         }
                         className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                     >
@@ -184,7 +184,7 @@ export default function Table({
                         />
                     </button>
                 </div>
-            </nav>
+            </nav >
         </div >
     );
 }

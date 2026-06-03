@@ -11,12 +11,14 @@ export type ClientSlice = {
     clientTotalItems: number;
     isLoadingClients: boolean;
     clientError: string | null;
-
+    setClientPage: (page: number) => void
+    setClientPageSize: (size: number) => void;
     getClients: (page: number, limit?: number) => Promise<void>;
     getClientById: (id: string) => Promise<Client>;
     createClient: (payload: Omit<Client, "id">) => Promise<Client>;
     updateClient: (id: string, payload: Partial<Client>) => Promise<Client>;
     deleteClient: (id: string) => Promise<void>;
+
 };
 
 export const createClientSlice: StateCreator<
@@ -32,7 +34,8 @@ export const createClientSlice: StateCreator<
     clientTotalItems: 0,
     isLoadingClients: false,
     clientError: null,
-
+    setClientPage: (page) => set({ clientPage: page }),
+    setClientPageSize: (size) => set({ clientPageSize: size }),
     getClients: async (page, limit) => {
         const size = limit ?? get().clientPageSize;
         set({ isLoadingClients: true, clientError: null });

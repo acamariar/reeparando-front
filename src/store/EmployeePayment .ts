@@ -64,7 +64,7 @@ export const createEmployeePaymentSlice: StateCreator<
         const size = limit ?? get().paymentPageSize ?? 10;
         set({ isLoadingPayments: true, paymentError: null });
         try {
-            const params: Record<string, any> = { employeeId, _sort: "date", _order: "desc", _page: page, _limit: size };
+            const params: Record<string, string | number> = { employeeId, _sort: "date", _order: "desc", _page: page, _limit: size };
             if (projectId) params.projectId = projectId;
             const { data, headers } = await api.get<EmployeePayment[]>("/pagosPersonal", { params });
             const totalItems = Number(headers["x-total-count"] ?? data.length);

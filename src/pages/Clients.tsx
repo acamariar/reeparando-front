@@ -1,7 +1,5 @@
-// src/pages/ClientsPage.tsx
 import { useEffect, useMemo, useState } from "react";
 import AppLayout from "../layout/AppLayout";
-// <-- ajusta al path real de tu table.tsx
 import { useBoundStore } from "../store";
 import type { Client } from "../types/Client";
 import Table from "../components/table/Table";
@@ -12,44 +10,44 @@ import { CreateClientModal } from "../components/project/CreateClientModal";
 export default function ClientsPage() {
     const {
         clients,
-        clientPage,
         clientPageSize,
-        clientTotalPages,
         isLoadingClients,
         clientError,
         getClients,
     } = useBoundStore();
 
-    const [page, setPage] = useState(clientPage);
+    const [page, setPage] = useState(1);
+    const pageSize = 10;
     const [openModal, setOpenModal] = useState(false);
     const [drawerClient, setDrawerClient] = useState<Client | null>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
 
-    // Cargar cuando cambia la página
-    useEffect(() => {
-        void getClients(page, clientPageSize);
-    }, [page, clientPageSize, getClients]);
 
-    // Items adaptados para que la tabla pueda mostrar nombre completo
+    useEffect(() => {
+        void getClients(1, 1000);
+    }, [getClients]);
+
+    const totalPages = Math.max(1, Math.ceil(clients.length / pageSize));
+
+    const visibleClients = useMemo(() => {
+        const start = (page - 1) * pageSize;
+
+        return clients.slice(start, start + pageSize);
+    }, [clients, page]);
     const tableItems = useMemo(
         () =>
-            clients.map((c) => ({
+            visibleClients.map((c) => ({
                 ...c,
                 name: `${c.firstName} ${c.lastName}`,
             })),
-        [clients]
+        [visibleClients]
     );
 
-    // Columnas que muestra la tabla
     const tableInfo = {
         Nombre: "name",
         Teléfono: "phone",
         Ciudad: "city",
     };
-
-
-
-
 
     return (
         <AppLayout>
@@ -70,15 +68,16 @@ export default function ClientsPage() {
                 </div>
 
                 {clientError && <div className="text-red-600 text-sm">{clientError}</div>}
+
                 <Table
-                    items={tableItems as Client[]}          // tu Table espera ClientTypes; es el mismo shape
+                    items={tableItems}
                     tableInfo={tableInfo}
                     onView={() => setDrawerOpen(true)}
                     page={page}
                     selectedItem={(c) => setDrawerClient(c as Client)}
                     setPage={setPage}
                     title="Clientes"
-                    totalPages={clientTotalPages}
+                    totalPages={totalPages}
                     action={true}
                 >
                     {isLoadingClients && (
@@ -89,8 +88,11 @@ export default function ClientsPage() {
                 <ClientDrawer
                     open={drawerOpen}
                     client={drawerClient}
+                    page={page}
+                    pageSize={clientPageSize}
                     onClose={() => setDrawerOpen(false)}
                 />
+
                 <CreateClientModal
                     open={openModal}
                     onClose={() => setOpenModal(false)} />

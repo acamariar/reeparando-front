@@ -67,7 +67,7 @@ export default function ProjectDetail() {
             getProjects?.(1, 500);
             getClients?.(1, 500);
             getEmployees?.(1, 500);
-            getExpensesByProject?.(projectId, 1, 400);
+            getExpensesByProject?.(projectId, 1, 3000);
             if (projectId) getTimeByProject(projectId, 1, 200).catch(() => { });
         }
     }, [projectId, getProjects, getClients, getEmployees, getExpensesByProject, getTimeByProject]);
@@ -104,7 +104,7 @@ export default function ProjectDetail() {
 
     const openDrawer = () => {
         setOpen(true);
-        void getExpensesByProject(projectId, 1, 400);
+        void getExpensesByProject(projectId, 1, 3000);
     };
 
     const onEditExpense = (g: ProjectExpense) => {
@@ -115,7 +115,7 @@ export default function ProjectDetail() {
     const onDeleteExpense = async (id: string) => {
         if (!confirm("¿Eliminar gasto?")) return;
         await deleteExpense(id);
-        await getExpensesByProject(projectId, 1, 20);
+        await getExpensesByProject(projectId, 1, 3000);
     };
     const facturaPendiente = expenses.filter((e) => e.category === "Contrafactura");
     const factuPen = facturaPendiente.map((e) => e.amount ?? 0).reduce((a, b) => a + b, 0);
@@ -124,8 +124,6 @@ export default function ProjectDetail() {
     const totalExpenses = expensesEmployes.reduce((sum, e) => sum + (e.amount ?? 0), 0);
 
 
-
-    console.log("presupuesto:", project.budgetphoto)
 
 
 
@@ -485,7 +483,7 @@ export default function ProjectDetail() {
 
                     // 3) Refrescar listas
                     await Promise.all([
-                        getExpensesByProject(projectId, 1, 100),
+                        getExpensesByProject(projectId, 1, 3000),
                         getProjects?.(1, 50),
                     ]);
 
@@ -507,7 +505,7 @@ export default function ProjectDetail() {
                         category: "ContrafacturaPagada",
                     });
 
-                    await getExpensesByProject(projectId!, 1, 100);
+                    await getExpensesByProject(projectId!, 1, 3000);
                     await getProjects?.(1, 50);
                     setShowPayContraModal(false);
                 }} />
@@ -529,7 +527,7 @@ export default function ProjectDetail() {
                 }}
                 onClose={() => setShowEditProject(false)}
                 onSubmit={async (values) => {
-                    await updateProject(projectId!, values); // tu acción patch
+                    await updateProject(projectId!, values as Partial<Project>); // tu acción patch
                     await getProjects?.(1, 50);
                     setShowEditProject(false);
                 }}

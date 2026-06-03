@@ -5,7 +5,8 @@ import * as yup from "yup";
 import { NumericFormat, type NumberFormatValues } from "react-number-format";
 import { Modal } from "../UI/Modal";
 import { useBoundStore } from "../../store";
-import type { ProjectExpense } from "../../types/projectExpense";
+import type { ProjectExpense } from "../../types/ProjectExpense";
+
 
 type FormValues = {
     concept: string;
@@ -116,7 +117,7 @@ export default function AddExpenseModal({ open, onClose, projectId, categories =
                     <button className="px-3 py-2 rounded border" onClick={onClose}>Cancelar</button>
                     <button
                         className="px-3 py-2 rounded bg-primary text-white disabled:opacity-50"
-                        onClick={handleSubmit(onSubmit)}
+                        onClick={handleSubmit(onSubmit as () => Promise<void>)}
                         disabled={isSubmitting}
                     >
                         Guardar

@@ -7,10 +7,12 @@ import { useBoundStore } from "../../store";
 type Props = {
     open: boolean;
     client: Client | null;
+    page: number;
+    pageSize: number;
     onClose: () => void;
 };
 
-export default function ClientDrawer({ open, client, onClose }: Props) {
+export default function ClientDrawer({ open, client, page, pageSize, onClose }: Props) {
     const [showEdit, setShowEdit] = useState(false);
     const [drawerClient, setDrawerClient] = useState<Client | null>(null);
     const updateClient = useBoundStore((s) => s.updateClient);
@@ -79,7 +81,7 @@ export default function ClientDrawer({ open, client, onClose }: Props) {
                 onClose={() => setShowEdit(false)}
                 onSave={async (values) => {
                     await updateClient(drawerClient!.id, values);
-                    await getClients(1, 50);
+                    await getClients(page, pageSize);
                 }}
             />
         </div>
