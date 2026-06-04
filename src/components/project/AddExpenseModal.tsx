@@ -102,7 +102,7 @@ export default function AddExpenseModal({ open, onClose, projectId, categories =
             await createExpense(payload);
         }
 
-        await getExpensesByProject(projectId, 1, 20);
+        await getExpensesByProject(projectId, 1, 3000);
         reset();
         onClose();
     };
