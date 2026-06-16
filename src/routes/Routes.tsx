@@ -1,12 +1,18 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "../pages/Login"
-import Panel from "../pages/Panel"
 import ProjectsPage from "../pages/Projects"
 import ProjectDetail from "../pages/ProjectDetail"
 import NominaPage from "../pages/NominaPage"
 import ClientsPage from "../pages/Clients"
 import EmployeeDetailPage from "../pages/EmployeeDetailPage"
 import PaymentsPage from "../pages/PaymentsPage"
+import ColaboradoresPage from "../pages/ColaboradoresPage"
+import VentasPage from "../pages/VentasPage"
+import ColaboradorDetail from "../pages/ColaboradorDetail"
+import GananciasPage from "../pages/Reportes"
+import ComprasPage from "../pages/ComprasPage"
+import ComprasReportPage from "../pages/ComprasReportPage"
+import GananciaPage from "../pages/ReporteTotal"
 
 
 export default function AppRoutes() {
@@ -15,14 +21,20 @@ export default function AppRoutes() {
         <BrowserRouter>
             <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/panel" element={<Panel />} />
+                <Route path="/panel" element={<ProjectsPage />} />
                 <Route path="/proyectos" element={<ProjectsPage />} />
                 <Route path="/proyectos/:id" element={<ProjectDetail />} />
                 <Route path="/nomina" element={<NominaPage />} />
                 <Route path="/nomina/pagos" element={<PaymentsPage />} />
                 <Route path="/clientes" element={<ClientsPage />} />
                 <Route path="/empleados/:id" element={<EmployeeDetailPage />} />
-
+                <Route path="/ventas/facturacion" element={<VentasPage />} />
+                <Route path="/colaboradores" element={<ColaboradoresPage />} />
+                <Route path="/colaboradores/:id" element={<ColaboradorDetail />} />
+                <Route path="/ventas/reporte" element={<GananciasPage />} />
+                <Route path="/compras/facturacion" element={<ComprasPage />} />
+                <Route path="/compras/reporte" element={<ComprasReportPage />} />
+                <Route path="/ventas/gananciales" element={<GananciaPage />} />
             </Routes>
         </BrowserRouter>
     )
