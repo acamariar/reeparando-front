@@ -3,13 +3,14 @@
 import { useForm } from "react-hook-form";
 import { useBoundStore } from "../../store";
 import { Modal } from "../UI/Modal";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 // tu modal genérico
 
 type FormValues = {
     firstName: string;
     lastName: string;
-    phone?: string;
+    phone: string;
     email?: string;
     address?: string;
     city?: string;
@@ -37,34 +38,48 @@ export function CreateClientModal({ open, onClose, mode = "create", initialValue
         formState: { isSubmitting },
         reset,
     } = useForm<FormValues>({
-        defaultValues: initialValues ?? { firstName: "", lastName: "" },
+        defaultValues: initialValues ?? { firstName: "", lastName: "", phone: "" },
     });
-
+    const [backendError, setBackendError] = useState("");
     const onSubmit = async (data: FormValues) => {
-        const fallback = async (payload: FormValues) => {
-            await createClient({
-                firstName: payload.firstName,
-                lastName: payload.lastName,
-                phone: payload.phone ?? "",
-                email: payload.email ?? "",
-                address: payload.address ?? "",
-                city: payload.city ?? "",
-                state: payload.state ?? "",
-                zip: payload.zip ?? "",
-                dni: payload.dni ?? "",
-                notes: payload.notes ?? "",
-                referenceMedium: payload.referenceMedium ?? "",
-                generatedSale: payload.generatedSale ?? "",
-                createdAt: new Date().toISOString().slice(0, 10),
-            });
-        };
+        setBackendError("");
 
-        const handler = onSave ?? fallback;
-        await handler(data);
-        reset();
-        onClose();
+        try {
+            if (onSave) {
+                await onSave(data);
+            } else {
+                await createClient({
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    phone: data.phone,
+                    email: data.email ?? "",
+                    address: data.address ?? "",
+                    city: data.city ?? "",
+                    state: data.state ?? "",
+                    zip: data.zip ?? "",
+                    dni: data.dni ?? "",
+                    notes: data.notes ?? "",
+                    referenceMedium: data.referenceMedium ?? "",
+                    generatedSale: data.generatedSale ?? "",
+                    createdAt: new Date().toISOString().slice(0, 10),
+                });
+            }
+
+            reset();
+            onClose();
+        } catch (err: string | unknown) {
+            let msg = "No se pudo guardar el cliente";
+
+            if (axios.isAxiosError(err)) {
+                const backendMsg = err.response?.data?.message;
+                msg = Array.isArray(backendMsg)
+                    ? backendMsg[0]
+                    : backendMsg ?? msg;
+            }
+
+            setBackendError(msg);
+        }
     };
-
     useEffect(() => {
         if (open) {
             reset({
@@ -111,7 +126,13 @@ export function CreateClientModal({ open, onClose, mode = "create", initialValue
             <div className="space-y-3">
                 <input className={inputCls} placeholder="Nombre" {...register("firstName", { required: true })} />
                 <input className={inputCls} placeholder="Apellido" {...register("lastName", { required: true })} />
-                <input className={inputCls} placeholder="Teléfono" {...register("phone")} />
+                <input
+                    {...register("phone", { required: "El teléfono es obligatorio" })}
+                    className={inputCls}
+                    placeholder="Teléfono"
+
+                />
+                {backendError && <p className="text-xs text-red-600">{backendError}</p>}
                 <input className={inputCls} placeholder="Email" {...register("email")} />
                 <input className={inputCls} placeholder="Dirección" {...register("address")} />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

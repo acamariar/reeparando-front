@@ -13,7 +13,7 @@ export type ClientSlice = {
     clientError: string | null;
     setClientPage: (page: number) => void
     setClientPageSize: (size: number) => void;
-    getClients: (page: number, limit?: number) => Promise<void>;
+    getClients: (page: number, limit?: number, search?: string) => Promise<void>;
     getClientById: (id: string) => Promise<Client>;
     createClient: (payload: Omit<Client, "id">) => Promise<Client>;
     updateClient: (id: string, payload: Partial<Client>) => Promise<Client>;
@@ -36,12 +36,12 @@ export const createClientSlice: StateCreator<
     clientError: null,
     setClientPage: (page) => set({ clientPage: page }),
     setClientPageSize: (size) => set({ clientPageSize: size }),
-    getClients: async (page, limit) => {
+    getClients: async (page, limit, search) => {
         const size = limit ?? get().clientPageSize;
         set({ isLoadingClients: true, clientError: null });
         try {
             const { data, headers } = await api.get<Client[]>("/clientes", {
-                params: { _page: page, _limit: size, _sort: "lastName", _order: "asc" },
+                params: { _page: page, _limit: size, _sort: "lastName", _order: "asc", search },
             });
             const totalItems = Number(headers["x-total-count"] ?? data.length);
             const totalPages = Math.max(1, Math.ceil(totalItems / size));

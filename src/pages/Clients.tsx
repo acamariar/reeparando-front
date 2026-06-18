@@ -14,35 +14,35 @@ export default function ClientsPage() {
         isLoadingClients,
         clientError,
         getClients,
+        clientTotalPages,
     } = useBoundStore();
 
     const [page, setPage] = useState(1);
-    const pageSize = 10;
     const [openModal, setOpenModal] = useState(false);
     const [drawerClient, setDrawerClient] = useState<Client | null>(null);
     const [drawerOpen, setDrawerOpen] = useState(false);
-
+    const [search, setSearch] = useState("");
 
     useEffect(() => {
-        void getClients(1, 1000);
-    }, [getClients]);
+        const t = setTimeout(() => {
+            void getClients(page, clientPageSize, search || undefined);
+        }, 300);
 
-    const totalPages = Math.max(1, Math.ceil(clients.length / pageSize));
+        return () => clearTimeout(t);
+    }, [page, clientPageSize, search, getClients]);
 
-    const visibleClients = useMemo(() => {
-        const start = (page - 1) * pageSize;
+    useEffect(() => {
+        setPage(1);
+    }, [search]);
 
-        return clients.slice(start, start + pageSize);
-    }, [clients, page]);
     const tableItems = useMemo(
         () =>
-            visibleClients.map((c) => ({
+            clients.map((c) => ({
                 ...c,
                 name: `${c.firstName} ${c.lastName}`,
             })),
-        [visibleClients]
+        [clients]
     );
-
     const tableInfo = {
         Nombre: "name",
         Teléfono: "phone",
@@ -56,6 +56,14 @@ export default function ClientsPage() {
                     <div>
                         <p className="text-sm text-slate-500">Clientes</p>
                         <h1 className="text-2xl font-bold text-accent">Lista</h1>
+                    </div>
+                    <div>
+                        <input
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Buscar cliente..."
+                            className="rounded-lg border w-96  border-slate-200 px-3 py-2 text-sm focus:border-primary focus:ring-primary/20 mr-1.5"
+                        />
                     </div>
                     <div>
                         <button
@@ -77,7 +85,7 @@ export default function ClientsPage() {
                     selectedItem={(c) => setDrawerClient(c as Client)}
                     setPage={setPage}
                     title="Clientes"
-                    totalPages={totalPages}
+                    totalPages={clientTotalPages}
                     action={true}
                 >
                     {isLoadingClients && (

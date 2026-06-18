@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import AppLayout from "../layout/AppLayout";
 import api from "../axios/mainAxios";
+import { useBoundStore } from "../store";
 
 type ReporteGanancias = {
     from: string;
@@ -49,11 +50,16 @@ const money = (value: number) =>
     `$${Number(value ?? 0).toLocaleString("es-AR")}`;
 
 export default function GananciasPage() {
+    const { colaboradores, getColaboradores } = useBoundStore();
     const [from, setFrom] = useState("");
     const [to, setTo] = useState("");
     const [data, setData] = useState<ReporteGanancias | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        getColaboradores(1, 100);
+    }, [getColaboradores]);
 
     const handleSearch = async () => {
         if (!from || !to) {
@@ -82,7 +88,12 @@ export default function GananciasPage() {
         setFrom(today);
         setTo(today);
     }, []);
-    console.log({ data });
+    // funcion para tomar al colaborAdor por su id y mostrar su nombre que esta guardado en colaboradores, osea tengo que buscar 
+    const colaboradorName = (id?: string | null) => {
+        if (!id) return "—";
+        const colaborador = colaboradores.find((c) => c.id === id);
+        return colaborador ? colaborador.firstName : "Desconocido";
+    }
 
     return (
         <AppLayout>
@@ -166,8 +177,7 @@ export default function GananciasPage() {
                                         <thead>
                                             <tr className="text-left border-b">
                                                 <th className="py-2 pr-4">Fecha</th>
-                                                <th className="py-2 pr-4">Servicio</th>
-                                                <th className="py-2 pr-4">Cobro</th>
+                                                <th className="py-2 pr-4">Tecnico</th>
                                                 <th className="py-2 pr-4">Total</th>
                                                 <th className="py-2 pr-4">Comisión</th>
                                                 <th className="py-2 pr-4">Neto</th>
@@ -177,8 +187,7 @@ export default function GananciasPage() {
                                             {data.sales.items.map((sale) => (
                                                 <tr key={sale.id} className="border-b last:border-0">
                                                     <td className="py-2 pr-4">{sale.date}</td>
-                                                    <td className="py-2 pr-4">{sale.serviceType}</td>
-                                                    <td className="py-2 pr-4">{sale.paymentMethod}</td>
+                                                    <td className="py-2 pr-4">{colaboradorName(sale.collaboratorId)}</td>
                                                     <td className="py-2 pr-4">{money(sale.amount)}</td>
                                                     <td className="py-2 pr-4">{money(sale.commissionAmount)}</td>
                                                     <td className="py-2 pr-4">{money(sale.companyNet)}</td>
