@@ -10,6 +10,7 @@ import { createEmployeePaymentSlice, type EmployeePaymentSlice } from "./Employe
 import { createVentaServicioSlice, type VentaServicioSlice } from "./VentaServicio";
 import { createColaboradorSlice, type ColaboradorSlice } from "./Colaborador";
 import { createCompraEmpresaSlice, type CompraEmpresaSlice } from "./CompraEmpresa";
+import { createSeguimientoSlice, type SeguimientoSlice } from "./Seguimiento";
 
 
 
@@ -23,7 +24,8 @@ export type BoundState = SessionSlice
     & EmployeePaymentSlice
     & ColaboradorSlice
     & VentaServicioSlice
-    & CompraEmpresaSlice;
+    & CompraEmpresaSlice
+    & SeguimientoSlice
 
 
 // extiende con `& OtroSlice` cuando agregues más
@@ -40,5 +42,6 @@ export const useBoundStore = create<BoundState>()(
         ...createColaboradorSlice(...a),
         ...createVentaServicioSlice(...a),
         ...createCompraEmpresaSlice(...a),
+        ...createSeguimientoSlice(...a),
         // ...otros slices
     })))

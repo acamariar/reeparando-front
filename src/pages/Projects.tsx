@@ -102,6 +102,12 @@ export default function ProjectsPage() {
             setProjectPage(page + 1);
         }
     };
+
+    // tomar el nombre del cliente a partir del clientId
+    const getClientName = (clientId: string) => {
+        const client = clients?.find(c => c.id === clientId);
+        return client ? `${client.firstName} ${client.lastName}` : "Cliente desconocido";
+    };
     return (
         <AppLayout>
             <div className="space-y-4">
@@ -167,7 +173,7 @@ export default function ProjectsPage() {
                                             </span>
                                             <div>
                                                 <p className="font-semibold text-slate-900">{p.name}</p>
-                                                <p className="text-xs text-slate-500">{p.id}</p>
+                                                <p className="text-xs text-slate-500">{getClientName(p.client)}</p>
                                             </div>
                                         </div>
                                         <button className="p-2 text-slate-400 hover:text-slate-600">

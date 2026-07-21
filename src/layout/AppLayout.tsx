@@ -29,11 +29,11 @@ const navItems: NavItem[] = [
     { to: "/nomina", label: "Nomina", icon: <ClipboardList className="w-5 h-5" /> },
     { to: "/clientes", label: "Clientes", icon: <ClipboardList className="w-5 h-5" /> },
     {
-        label: "Ventas",
+        label: "Seguimientos",
         icon: <ReceiptText className="w-5 h-5" />,
         subItems: [
-            { to: "/ventas/facturacion", label: "Facturación" },
-            { to: "/ventas/reporte", label: "Reporte de Ventas" }
+            { to: "/seguimientos/facturacion", label: "Facturación" },
+            { to: "/seguimientos/reporte", label: "Reporte de Seguimientos" }
         ]
     },
     {
