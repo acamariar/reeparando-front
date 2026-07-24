@@ -13,6 +13,7 @@ import ComprasPage from "../pages/ComprasPage"
 import ComprasReportPage from "../pages/ComprasReportPage"
 import GananciaPage from "../pages/ReporteTotal"
 import SeguimientosPage from "../pages/SeguimientosPage"
+import Calendario from "../pages/Calendario"
 
 
 export default function AppRoutes() {
@@ -25,6 +26,7 @@ export default function AppRoutes() {
                 <Route path="/proyectos" element={<ProjectsPage />} />
                 <Route path="/proyectos/:id" element={<ProjectDetail />} />
                 <Route path="/nomina" element={<NominaPage />} />
+                <Route path="/nomina/calendario" element={<Calendario />} />
                 <Route path="/nomina/pagos" element={<PaymentsPage />} />
                 <Route path="/clientes" element={<ClientsPage />} />
                 <Route path="/empleados/:id" element={<EmployeeDetailPage />} />

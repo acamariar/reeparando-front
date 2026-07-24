@@ -13,6 +13,7 @@ export type TimeEntrySlice = {
     createTime: (payload: Omit<TimeEntry, "id">) => Promise<TimeEntry>;
     updateTime: (id: string, payload: Partial<TimeEntry>) => Promise<TimeEntry>;
     deleteTime: (id: string) => Promise<void>;
+    getTimeRange: (from: string, to: string, employeeId?: string, projectId?: string, limit?: number, page?: number) => Promise<void>;
 };
 
 export const createTimeEntrySlice: StateCreator<
@@ -68,4 +69,25 @@ export const createTimeEntrySlice: StateCreator<
         await api.delete(`/tiempos/${id}`);
         set({ timeEntries: get().timeEntries.filter((t) => t.id !== id) });
     },
+    getTimeRange: async (from, to, employeeId?, projectId?, limit = 1000, page = 1) => {
+        set({ isLoadingTime: true, timeError: null });
+
+        try {
+            const { data } = await api.get<TimeEntry[]>("/tiempos", {
+                params: {
+                    from,
+                    to,
+                    employeeId,
+                    projectId,
+                    _limit: limit,
+                    _page: page,
+                },
+            });
+
+            set({ timeEntries: data, isLoadingTime: false });
+        } catch (err) {
+            set({ isLoadingTime: false, timeError: "Error al cargar tiempos" });
+            throw err;
+        }
+    }
 });

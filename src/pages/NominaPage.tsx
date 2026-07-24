@@ -1,6 +1,6 @@
 // src/pages/Nomina.tsx
 import { useEffect, useState } from "react";
-import { Plus, Wallet } from "lucide-react";
+import { CalendarSearchIcon, Plus, Wallet } from "lucide-react";
 import AppLayout from "../layout/AppLayout";
 import { useBoundStore } from "../store";
 import AddPaymentModal from "../components/nomina/AddPaymentModal";
@@ -33,6 +33,13 @@ export default function NominaPage() {
                     </div>
                     <div className="flex gap-2">
                         <button
+                            onClick={() => navigate("/nomina/calendario")}
+                            className="inline-flex mr-1.5 items-center gap-2 px-3 py-2 rounded-lg bg-primary text-white hover:bg-primary/90"
+                        >
+                            <CalendarSearchIcon className="w-4 h-4" />
+                            Calendario
+                        </button>
+                        <button
                             className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-primary text-white  hover:bg-primary/90"
                             onClick={() => setShowAddEmployee(true)}
                         >
@@ -42,8 +49,10 @@ export default function NominaPage() {
                             onClick={() => navigate("/nomina/pagos")}
                             className="inline-flex mr-1.5 items-center gap-2 px-3 py-2 rounded-lg bg-primary text-white hover:bg-primary/90"
                         >
+                            <Wallet className="w-4 h-4" />
                             Pagos Realizados
                         </button>
+
 
                     </div>
                 </div>
