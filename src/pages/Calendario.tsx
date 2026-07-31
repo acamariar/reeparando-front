@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, CalendarDays, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Users } from "lucide-react";
 import AppLayout from "../layout/AppLayout";
 import { useBoundStore } from "../store";
 import type { TimeEntry } from "../types/TimeEntry ";
@@ -50,8 +50,6 @@ function monthLabel(date: Date) {
 export default function Calendario() {
     const employees = useBoundStore((s) => s.employees);
     const getEmployees = useBoundStore((s) => s.getEmployees);
-
-    const projects = useBoundStore((s) => s.projects ?? []);
     const getProjects = useBoundStore((s) => s.getProjects);
 
     const timeEntries = useBoundStore((s) => s.timeEntries);
@@ -188,24 +186,6 @@ export default function Calendario() {
                             </select>
                         </label>
 
-                        <label className="text-sm text-slate-700">
-                            <div className="mb-1 flex items-center gap-1 text-xs font-medium text-slate-500">
-                                <CalendarDays className="h-3.5 w-3.5" />
-                                Proyecto:
-                            </div>
-                            <select
-                                value={projectId}
-                                onChange={(e) => setProjectId(e.target.value)}
-                                className="min-w-[230px] rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                            >
-                                <option value="">Todos los proyectos</option>
-                                {projects.map((p: any) => (
-                                    <option key={p.id} value={p.id}>
-                                        {p.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </label>
                     </div>
                 </div>
 

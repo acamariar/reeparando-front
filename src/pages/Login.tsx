@@ -32,8 +32,14 @@ export default function Login() {
 
     const onSubmit = async (data: LoginForm) => {
         try {
-            await login(data.usuario, data.clave);
-            navigate("/panel");
+            const result = await login(data.usuario, data.clave);
+
+            if (!result.passwordSet) {
+                navigate("/setpassword");
+            } else {
+                navigate("/panel");
+            }
+
         } catch {
             /* el slice ya setea error */
         }

@@ -3,6 +3,7 @@ export type User = {
     usuario: string,
     clave: string,
     nivel: 'superAdmin' | 'admin' | 'vendedor'
+    passwordSet?: boolean;
 }
 
 

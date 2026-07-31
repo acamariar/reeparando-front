@@ -11,7 +11,7 @@ export type SessionSlice = {
     user: User;
     isLoading: boolean;
     error: string | null;
-    login: (usuario: string, clave: string) => Promise<void>;
+    login: (usuario: string, clave: string) => Promise<User>;
     logout: () => void;
     getUser: () => Promise<void>
 }
@@ -20,6 +20,7 @@ const initialSessionData: User = {
     usuario: "",
     clave: "",
     nivel: 'superAdmin'
+
 }
 
 export const createSessionSlice: StateCreator<
@@ -36,10 +37,9 @@ export const createSessionSlice: StateCreator<
     login: async (usuario, clave) => {
         set({ isLoading: true, error: null });
         try {
-            const { data } = await api.get<User[]>("/usuarios", { params: { usuario, clave } });
-            const user = data.find((u) => u.usuario === usuario && u.clave === clave);
-            if (!user) throw new Error("Credenciales incorrectas");
-            set({ isAuthenticated: true, user, isLoading: false });
+            const { data } = await api.post("/usuarios/login", { usuario, clave });
+            set({ isAuthenticated: true, user: data.user, isLoading: false });
+            return data;
         } catch (err) {
             set({ isAuthenticated: false, user: initialSessionData, isLoading: false, error: "Credenciales incorrectas" });
             throw err;
