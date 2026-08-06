@@ -8,6 +8,7 @@ import type {
     CreateSeguimientoPayload,
     EstadoSeguimiento,
     OrigenClienteSeguimiento,
+    Seguimiento,
     TipoVisitaSeguimiento,
 } from "../../types/Seguimiento";
 
@@ -15,7 +16,8 @@ type Props = {
     open: boolean;
     onClose: () => void;
     mode: TipoVisitaSeguimiento;
-    edit?: "create" | "edit";
+    action?: "create" | "edit";
+    seguimiento?: Seguimiento
 };
 
 type FormValues = {
@@ -45,13 +47,13 @@ function getBackendError(err: unknown) {
     return "No se pudo guardar el seguimiento";
 }
 
-export function CreateSeguimientoModal({ open, onClose, mode }: Props) {
+export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, action }: Props) {
     const createSeguimiento = useBoundStore((s) => s.createSeguimiento);
     const clientes = useBoundStore((s) => s.clients);
     const colaboradores = useBoundStore((s) => s.colaboradores);
     const getClients = useBoundStore((s) => s.getClients);
     const getColaboradores = useBoundStore((s) => s.getColaboradores);
-
+    const updateSeguimiento = useBoundStore((s) => s.updateSeguimiento);
     const [backendError, setBackendError] = useState("");
 
     const {
@@ -79,35 +81,53 @@ export function CreateSeguimientoModal({ open, onClose, mode }: Props) {
         },
     });
 
+    const emptyValues: FormValues = {
+        numeroVisita: "",
+        clientId: "",
+        colaboradorId: "",
+        direccionServicio: "",
+        zona: "",
+        fechaSolicitud: today(),
+        fechaVisita: "",
+        servicioRequerido: "",
+        tipoServicio: "",
+        origenCliente: "WHATSAPP_DIRECTO",
+        estado: "A_COORDINAR",
+        montoPresupuestado: 0,
+        observacionesCliente: "",
+    };
 
     useEffect(() => {
-        if (open) {
-            reset({
-                numeroVisita: "",
-                clientId: "",
-                colaboradorId: "",
-                direccionServicio: "",
-                zona: "",
-                fechaSolicitud: today(),
-                fechaVisita: "",
-                servicioRequerido: "",
-                tipoServicio: "",
-                origenCliente: "WHATSAPP_DIRECTO",
-                estado: "A_COORDINAR",
-                montoPresupuestado: 0,
-                observacionesCliente: "",
-            });
-
-
-            void getClients(1, 5000).catch(() => { });
-            void getColaboradores(1, 5000).catch(() => { });
+        if (!open) {
+            reset(emptyValues);
             setBackendError("");
-        } else {
-            reset();
-            setBackendError("");
+            return;
         }
 
-    }, [open, mode, reset, getClients, getColaboradores]);
+        if (action === "edit" && seguimiento) {
+            reset({
+                numeroVisita: seguimiento.numeroVisita ?? "",
+                clientId: seguimiento.clientId ?? "",
+                colaboradorId: seguimiento.colaboradorId ?? "",
+                direccionServicio: seguimiento.direccionServicio ?? "",
+                zona: seguimiento.zona ?? "",
+                fechaSolicitud: seguimiento.fechaSolicitud ?? today(),
+                fechaVisita: seguimiento.fechaVisita ?? "",
+                servicioRequerido: seguimiento.servicioRequerido ?? "",
+                tipoServicio: seguimiento.tipoServicio ?? "",
+                origenCliente: seguimiento.origenCliente ?? "WHATSAPP_DIRECTO",
+                estado: seguimiento.estado ?? "A_COORDINAR",
+                montoPresupuestado: seguimiento.montoPresupuestado ?? 0,
+                observacionesCliente: seguimiento.observacionesCliente ?? "",
+            });
+        } else {
+            reset(emptyValues);
+        }
+
+        void getClients(1, 5000).catch(() => { });
+        void getColaboradores(1, 5000).catch(() => { });
+        setBackendError("");
+    }, [open, action, seguimiento, reset, getClients, getColaboradores]);
 
     const clientOptions = useMemo(
         () =>
@@ -152,7 +172,11 @@ export function CreateSeguimientoModal({ open, onClose, mode }: Props) {
         };
 
         try {
-            await createSeguimiento(payload);
+            if (action === "edit" && seguimiento) {
+                await updateSeguimiento(seguimiento.id, payload);
+            } else {
+                await createSeguimiento(payload);
+            }
             reset();
             onClose();
         } catch (err: unknown) {

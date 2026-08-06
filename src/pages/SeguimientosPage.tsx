@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import AppLayout from "../layout/AppLayout";
 import { useBoundStore } from "../store";
 import Table from "../components/table/Table";
@@ -7,6 +7,7 @@ import type { Seguimiento } from "../types/Seguimiento";
 import { CreateSeguimientoRelevamientoModal } from "../components/seguimientos/CreateSeguimientoRelevamientoModal";
 import { CreateSeguimientoTecnicoModal } from "../components/seguimientos/CreateSeguimientoTecnicoModal";
 import FinalizeSeguimientoModal from "../components/seguimientos/FinalizeSeguimientoModal";
+import { CreateSeguimientoModal } from "../components/seguimientos/CreateSeguimientoModal";
 
 const money = (value: number) => `$${Number(value ?? 0).toLocaleString("es-AR")}`;
 
@@ -30,6 +31,8 @@ export default function SeguimientosPage() {
         "A_COORDINAR" | "APROBADO" | "RECHAZADO" | "CULMINADO" | "GARANTIA" | ""
     >("");
     const [openRelevamiento, setOpenRelevamiento] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+
     const [openTecnico, setOpenTecnico] = useState(false);
     const [openFinalizar, setOpenFinalizar] = useState(false);
     const [selectedSeguimiento, setSelectedSeguimiento] = useState<Seguimiento | null>(null);
@@ -235,6 +238,16 @@ export default function SeguimientosPage() {
                             >
                                 <Trash2 className="w-4 h-4" />
                             </button>
+                            <button
+                                className="text-primary hover:text-red-800"
+                                onClick={() => {
+                                    setSelectedSeguimiento(item);
+                                    setOpenEdit(true);
+                                }}
+                                title="Editar seguimiento"
+                            >
+                                <Edit className="w-4 h-4" />
+                            </button>
                         </div>
                     )}
                 >
@@ -271,6 +284,17 @@ export default function SeguimientosPage() {
                         estado: estado || undefined,
                     });
                 }}
+            />
+            <CreateSeguimientoModal
+
+                open={openEdit}
+                onClose={() => {
+                    setOpenEdit(false);
+                    setSelectedSeguimiento(null);
+                }}
+                mode={selectedSeguimiento?.tipoVisita ?? "TECNICA"}
+                action="edit"
+                seguimiento={selectedSeguimiento || undefined}
             />
         </AppLayout>
     );
