@@ -22,7 +22,10 @@ export default function AppRoutes() {
 
         <BrowserRouter>
             <Routes>
+
                 <Route path="/" element={<Login />} />
+
+
                 <Route path="/panel" element={<ProjectsPage />} />
                 <Route path="/proyectos" element={<ProjectsPage />} />
                 <Route path="/proyectos/:id" element={<ProjectDetail />} />
