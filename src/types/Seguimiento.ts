@@ -44,7 +44,7 @@ export type Seguimiento = {
 
     fechaSolicitud: string;
     fechaVisita?: string | null;
-
+    horaVisita?: string | null;
     servicioRequerido: string;
     tipoServicio?: string | null;
     origenCliente: OrigenClienteSeguimiento;
@@ -80,6 +80,7 @@ export type CreateSeguimientoPayload = {
     zona?: string;
     fechaSolicitud: string;
     fechaVisita?: string;
+    horaVisita?: string;
     servicioRequerido: string;
     tipoServicio?: string;
     origenCliente: OrigenClienteSeguimiento;

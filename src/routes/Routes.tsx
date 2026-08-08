@@ -15,6 +15,7 @@ import GananciaPage from "../pages/ReporteTotal"
 import SeguimientosPage from "../pages/SeguimientosPage"
 import Calendario from "../pages/Calendario"
 import SetPasswordPage from "../pages/SetPasswordPage"
+import SeguimientoDetail from "../pages/SeguimientoDetail"
 
 
 export default function AppRoutes() {
@@ -42,6 +43,7 @@ export default function AppRoutes() {
                 <Route path="/compras/reporte" element={<ComprasReportPage />} />
                 <Route path="/ventas/gananciales" element={<GananciaPage />} />
                 <Route path="/setpassword" element={<SetPasswordPage />} />
+                <Route path="/seguimientos/:id" element={<SeguimientoDetail />} />
             </Routes>
         </BrowserRouter>
     )

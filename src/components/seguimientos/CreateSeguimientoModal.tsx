@@ -28,6 +28,7 @@ type FormValues = {
     zona?: string;
     fechaSolicitud: string;
     fechaVisita?: string;
+    horaVisita?: string;
     servicioRequerido: string;
     tipoServicio?: string;
     origenCliente: OrigenClienteSeguimiento;
@@ -72,6 +73,7 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
             zona: "",
             fechaSolicitud: today(),
             fechaVisita: "",
+            horaVisita: "",
             servicioRequerido: "",
             tipoServicio: "",
             origenCliente: "WHATSAPP_DIRECTO",
@@ -89,6 +91,7 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
         zona: "",
         fechaSolicitud: today(),
         fechaVisita: "",
+        horaVisita: "",
         servicioRequerido: "",
         tipoServicio: "",
         origenCliente: "WHATSAPP_DIRECTO",
@@ -113,6 +116,7 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
                 zona: seguimiento.zona ?? "",
                 fechaSolicitud: seguimiento.fechaSolicitud ?? today(),
                 fechaVisita: seguimiento.fechaVisita ?? "",
+                horaVisita: seguimiento.horaVisita ?? "",
                 servicioRequerido: seguimiento.servicioRequerido ?? "",
                 tipoServicio: seguimiento.tipoServicio ?? "",
                 origenCliente: seguimiento.origenCliente ?? "WHATSAPP_DIRECTO",
@@ -162,6 +166,7 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
             zona: values.zona?.trim() || undefined,
             fechaSolicitud: values.fechaSolicitud,
             fechaVisita: values.fechaVisita || undefined,
+            horaVisita: values.horaVisita || undefined,
             servicioRequerido: values.servicioRequerido.trim(),
             tipoServicio: values.tipoServicio?.trim() || undefined,
             origenCliente: values.origenCliente,
@@ -261,6 +266,28 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
                         <input
                             type="date"
                             {...register("fechaSolicitud", { required: "La fecha es obligatoria" })}
+                            className={inputCls}
+                        />
+                        {errors.fechaSolicitud && (
+                            <p className="text-xs text-rose-600">{errors.fechaSolicitud.message}</p>
+                        )}
+                    </label>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <label className="text-sm text-slate-700 block">
+                        Fecha de Visita
+                        <input
+                            type="date"
+                            {...register("fechaVisita")}
+                            className={inputCls}
+                        />
+                    </label>
+
+                    <label className="text-sm text-slate-700 block">
+                        Hora de Visita
+                        <input
+                            type="time"
+                            {...register("horaVisita")}
                             className={inputCls}
                         />
                         {errors.fechaSolicitud && (

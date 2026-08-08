@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Edit, Plus, Trash2 } from "lucide-react";
+import { ArrowUpLeftFromSquareIcon, Edit, Plus, Trash2 } from "lucide-react";
 import AppLayout from "../layout/AppLayout";
 import { useBoundStore } from "../store";
 import Table from "../components/table/Table";
@@ -8,10 +8,12 @@ import { CreateSeguimientoRelevamientoModal } from "../components/seguimientos/C
 import { CreateSeguimientoTecnicoModal } from "../components/seguimientos/CreateSeguimientoTecnicoModal";
 import FinalizeSeguimientoModal from "../components/seguimientos/FinalizeSeguimientoModal";
 import { CreateSeguimientoModal } from "../components/seguimientos/CreateSeguimientoModal";
+import { useNavigate } from "react-router-dom";
 
 const money = (value: number) => `$${Number(value ?? 0).toLocaleString("es-AR")}`;
 
 export default function SeguimientosPage() {
+    const navigate = useNavigate();
     const {
         seguimientos,
         seguimientoPageSize,
@@ -140,7 +142,7 @@ export default function SeguimientosPage() {
                             <input
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                placeholder="Buscar por visita, cliente, servicio..."
+                                placeholder="Buscar por visita"
                                 className="rounded-lg border border-slate-200 px-3 py-2 text-sm"
                             />
 
@@ -214,7 +216,7 @@ export default function SeguimientosPage() {
 
                                     className="border border-secondary text-secondary hover:bg-blue-50 hover:text-primary px-2 py-1 rounded-lg text-sm"
                                     onClick={() => {
-                                        setSelectedSeguimiento(item);
+                                        setSelectedSeguimiento(item as Seguimiento);
                                         setOpenFinalizar(true);
                                     }}
                                 >
@@ -224,7 +226,7 @@ export default function SeguimientosPage() {
                                 <button
                                     className="border border-secondary text-secondary hover:bg-blue-50 hover:text-primary px-2 py-1 rounded-lg text-sm"
                                     onClick={() => {
-                                        setSelectedSeguimiento(item);
+                                        setSelectedSeguimiento(item as Seguimiento);
                                         setOpenFinalizar(true);
                                     }}
                                 >
@@ -241,12 +243,19 @@ export default function SeguimientosPage() {
                             <button
                                 className="text-primary hover:text-red-800"
                                 onClick={() => {
-                                    setSelectedSeguimiento(item);
+                                    setSelectedSeguimiento(item as Seguimiento);
                                     setOpenEdit(true);
                                 }}
                                 title="Editar seguimiento"
                             >
                                 <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                                className="text-accent hover:text-red-800"
+                                onClick={() => navigate(`/seguimientos/${item.id}`)}
+                                title="Ver seguimiento"
+                            >
+                                <ArrowUpLeftFromSquareIcon className="w-4 h-4" />
                             </button>
                         </div>
                     )}

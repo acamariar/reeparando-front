@@ -3,6 +3,7 @@ import {
     ArrowLongRightIcon,
 } from '@heroicons/react/16/solid';
 import RedireactButton from '../UI/RedireactButton';
+import type { Seguimiento } from '../../types/Seguimiento';
 
 type TableInfoType = {
     [key: string]: string;
@@ -14,7 +15,7 @@ type TableRow = {
 };
 
 type TableProps = {
-    items: TableRow[];
+    items: TableRow[] | Seguimiento[];
     tableInfo: TableInfoType;
     onView?: () => void;
     selectedItem?: (item: TableRow) => void;
@@ -89,7 +90,7 @@ export default function Table({
                         {items.map((item, index) => (
                             <tr key={item.id + index}>
                                 {Object.values(tableInfo).map((value: string, colIndex: number) => {
-                                    const raw = item[value];
+                                    const raw = item[value as keyof typeof item];
                                     let content = '';
                                     if (Array.isArray(raw)) {
                                         content = raw.map((i) => `${i}`).join(',');
