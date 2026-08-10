@@ -226,12 +226,26 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
                     <Select
                         label="Cliente"
                         value={watch("clientId") ?? ""}
-                        onChange={(value) =>
+                        onChange={(value) => {
                             setValue("clientId", value, {
                                 shouldDirty: true,
                                 shouldValidate: true,
-                            })
-                        }
+                            });
+
+                            const selectedClient = clientes.find((c) => c.id === value);
+
+                            if (selectedClient) {
+                                setValue("direccionServicio", selectedClient.address ?? "", {
+                                    shouldDirty: true,
+                                    shouldValidate: true,
+                                });
+
+                                setValue("zona", selectedClient.city ?? "", {
+                                    shouldDirty: true,
+                                    shouldValidate: true,
+                                });
+                            }
+                        }}
                         options={clientOptions}
                         searchable
                     />
@@ -245,6 +259,7 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
                         })}
                         className={inputCls}
                         placeholder="Av. Rivadavia 1234"
+
                     />
                     {errors.direccionServicio && (
                         <p className="text-xs text-rose-600">{errors.direccionServicio.message}</p>

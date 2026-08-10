@@ -16,6 +16,7 @@ import SeguimientosPage from "../pages/SeguimientosPage"
 import Calendario from "../pages/Calendario"
 import SetPasswordPage from "../pages/SetPasswordPage"
 import SeguimientoDetail from "../pages/SeguimientoDetail"
+import PanelCentral from "../pages/PanelCentral"
 
 
 export default function AppRoutes() {
@@ -27,7 +28,7 @@ export default function AppRoutes() {
                 <Route path="/" element={<Login />} />
 
 
-                <Route path="/panel" element={<ProjectsPage />} />
+                <Route path="/panel" element={<PanelCentral />} />
                 <Route path="/proyectos" element={<ProjectsPage />} />
                 <Route path="/proyectos/:id" element={<ProjectDetail />} />
                 <Route path="/nomina" element={<NominaPage />} />

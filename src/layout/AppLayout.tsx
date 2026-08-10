@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
     Package,
-    ClipboardList,
     LogOut,
     UsersRound,
     ReceiptText,
-    ChevronDown
+    ChevronDown,
+    ShoppingBag,
+    UserCheck2,
+    LayoutDashboard
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -25,9 +27,10 @@ type NavItem = {
 type AppLayoutProps = { children: ReactNode };
 
 const navItems: NavItem[] = [
-    { to: "/proyectos", label: "Proyectos", icon: <Package className="w-5 h-5" /> },
-    { to: "/nomina", label: "Nomina", icon: <ClipboardList className="w-5 h-5" /> },
-    { to: "/clientes", label: "Clientes", icon: <ClipboardList className="w-5 h-5" /> },
+
+
+    { to: "/panel", label: "Panel", icon: <LayoutDashboard className="w-5 h-5" /> },
+    { to: "/clientes", label: "Clientes", icon: <UserCheck2 className="w-5 h-5" /> },
     {
         label: "Seguimientos",
         icon: <ReceiptText className="w-5 h-5" />,
@@ -38,7 +41,7 @@ const navItems: NavItem[] = [
     },
     {
         label: "Compras",
-        icon: <ReceiptText className="w-5 h-5" />,
+        icon: <ShoppingBag className="w-5 h-5" />,
         subItems: [
             { to: "/compras/facturacion", label: "Facturación" },
             { to: "/compras/reporte", label: "Reporte de Compras" }
@@ -57,6 +60,15 @@ const navItems: NavItem[] = [
         label: "Colaboradores",
         icon: <UsersRound className="w-5 h-5" />,
     },
+    {
+        label: "Obras",
+        icon: <Package className="w-5 h-5" />,
+        subItems: [
+            { to: "/proyectos", label: "Proyectos" },
+            { to: "/nomina", label: "Nomina" }
+        ]
+    },
+
 ];
 
 export default function AppLayout({ children }: AppLayoutProps) {
