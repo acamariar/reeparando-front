@@ -9,6 +9,7 @@ import Table from "../components/table/Table";
 import { Modal } from "../components/UI/Modal";
 import { CreateColaboradorModal } from "../components/colaboradores/CreateColaboradorModal";
 import type { Colaborador } from "../types/Colaborador";
+import { formatfecha } from "../helper/money";
 const money = (value: number) => `$${Number(value ?? 0).toLocaleString("es-AR")}`;
 const today = () => new Date().toLocaleDateString("en-CA");
 
@@ -46,7 +47,7 @@ export default function ColaboradorDetail() {
 
     useEffect(() => {
         if (!id) return;
-        void getMovimientosByColaborador(id, page, 3);
+        void getMovimientosByColaborador(id, page, 10);
     }, [id, page, getMovimientosByColaborador]);
 
     const balance = Number(colaborador?.saldoActual ?? 0);
@@ -55,7 +56,7 @@ export default function ColaboradorDetail() {
         () =>
             movimientos.map((m) => ({
                 ...m,
-                createdAtDisplay: m.createdAt,
+                createdAtDisplay: formatfecha(m.createdAt),
                 typeDisplay:
                     m.type === "VENTA"
                         ? "Venta"

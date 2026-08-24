@@ -66,8 +66,7 @@ export default function SeguimientosPage() {
                     ? `${s.client.firstName} ${s.client.lastName}`
                     : "—",
                 colaboradorDisplay: s.colaborador
-                    ? `${s.colaborador.firstName} ${s.colaborador.lastName}${s.colaborador.alias ? ` · ${s.colaborador.alias}` : ""
-                    }`
+                    ? `${s.colaborador.firstName} ${s.colaborador.lastName}`
                     : "—",
                 tipoVisitaDisplay: s.tipoVisita === "TECNICA" ? "Visita técnica" : "Relevamiento",
                 estadoDisplay: formatEstado(s.estado),
@@ -82,7 +81,6 @@ export default function SeguimientosPage() {
 
     const tableInfo = {
         "N° visita": "numeroVisita",
-        Fecha: "fechaSolicitud",
         Cliente: "clientDisplay",
         Colaborador: "colaboradorDisplay",
         Estado: "estadoDisplay",

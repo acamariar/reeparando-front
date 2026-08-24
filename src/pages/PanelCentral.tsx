@@ -1,8 +1,9 @@
 import { useEffect } from "react";
-import { CalendarDays, MessageCircle, AlarmClock, ArrowRight } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import AppLayout from "../layout/AppLayout";
 import { useBoundStore } from "../store";
 import type { PanelVisitItem } from "../types/Panel";
+import { money } from "../helper/money";
 
 
 
@@ -46,7 +47,12 @@ export default function PanelCentral() {
     const panelDate = useBoundStore((s) => s.panelDate);
     const setPanelDate = useBoundStore((s) => s.setPanelDate);
     const getPanelResumen = useBoundStore((s) => s.getPanelResumen);
+    const colaboradores = useBoundStore((s) => s.colaboradores);
+    const getColaboradores = useBoundStore((s) => s.getColaboradores);
 
+    useEffect(() => {
+        void getColaboradores(1, 5000).catch(() => { });
+    }, [getColaboradores]);
     useEffect(() => {
         void getPanelResumen(panelDate).catch(() => { });
     }, [getPanelResumen, panelDate]);
@@ -60,6 +66,10 @@ export default function PanelCentral() {
         window.open(url, "_blank", "noopener,noreferrer");
     };
 
+
+    const colaboradoresDescuadrados = colaboradores.filter(
+        (c) => Number(c.saldoActual ?? 0) !== 0
+    );
     return (
         <AppLayout>
             <div className="space-y-6">
@@ -95,32 +105,7 @@ export default function PanelCentral() {
                     <div className="text-sm text-slate-500">Cargando panel...</div>
                 ) : (
                     <>
-                        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                            <StatCard
-                                label="Visitas de hoy"
-                                value={String(panelResumen?.alerts.todayPending ?? 0)}
-                                note="Pendientes para hoy"
-                                icon={<CalendarDays className="w-5 h-5" />}
-                            />
-                            <StatCard
-                                label="Visitas de mañana"
-                                value={String(panelResumen?.alerts.tomorrowPending ?? 0)}
-                                note="Pendientes para mañana"
-                                icon={<ArrowRight className="w-5 h-5" />}
-                            />
-                            <StatCard
-                                label="Vencidas"
-                                value={String(panelResumen?.alerts.overduePending ?? 0)}
-                                note="Aún no finalizadas"
-                                icon={<AlarmClock className="w-5 h-5" />}
-                            />
-                            <StatCard
-                                label="Total alertas"
-                                value={String(panelResumen?.alerts.totalPending ?? 0)}
-                                note="Pendientes totales"
-                                icon={<MessageCircle className="w-5 h-5" />}
-                            />
-                        </div>
+
 
                         <div className="grid gap-4 xl:grid-cols-3">
                             <VisitsCard
@@ -145,36 +130,42 @@ export default function PanelCentral() {
                     </>
                 )}
             </div>
+            <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm mt-6 max-w-fit">
+                <h2 className="text-lg font-semibold text-slate-900">
+                    Colaboradores con saldo pendiente
+                </h2>
+
+                <div className="mt-4 space-y-3 max-h-80 overflow-y-auto pr-2">
+                    {colaboradoresDescuadrados.map((c) => (
+                        <div
+                            key={c.id}
+                            className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+                        >
+                            <div className="flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="font-semibold text-slate-900">
+                                        {c.firstName} {c.lastName}
+                                    </p>
+                                    <p className="text-sm text-slate-600">
+                                        {c.alias ? `Alias: ${c.alias}` : "Sin alias"}
+                                    </p>
+                                </div>
+
+
+                            </div>
+
+                            <p className="mt-3 text-sm font-semibold">
+                                Saldo: {money(Number(c.saldoActual ?? 0))}
+                            </p>
+                        </div>
+                    ))}
+                </div>
+            </section>
         </AppLayout>
     );
 }
 
-function StatCard({
-    label,
-    value,
-    note,
-    icon,
-}: {
-    label: string;
-    value: string;
-    note?: string;
-    icon?: React.ReactNode;
-}) {
-    return (
-        <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-start justify-between gap-3">
-                <div>
-                    <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
-                    <p className="mt-2 text-2xl font-bold text-slate-900">{value}</p>
-                    {note ? <p className="mt-1 text-xs text-slate-500">{note}</p> : null}
-                </div>
-                {icon ? (
-                    <div className="rounded-xl bg-slate-100 p-2 text-slate-600">{icon}</div>
-                ) : null}
-            </div>
-        </div>
-    );
-}
+
 
 function VisitsCard({
     title,

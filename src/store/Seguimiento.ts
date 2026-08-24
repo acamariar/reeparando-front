@@ -69,7 +69,7 @@ export const createSeguimientoSlice: StateCreator<
                 params: {
                     _page: page,
                     _limit: size,
-                    _sort: "fechaSolicitud",
+                    _sort: "createdAt",
                     _order: "desc",
                     search: params?.search,
                     estado: params?.estado,

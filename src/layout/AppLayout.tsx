@@ -8,7 +8,8 @@ import {
     ChevronDown,
     ShoppingBag,
     UserCheck2,
-    LayoutDashboard
+    LayoutDashboard,
+    FolderKanbanIcon
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -33,7 +34,7 @@ const navItems: NavItem[] = [
     { to: "/clientes", label: "Clientes", icon: <UserCheck2 className="w-5 h-5" /> },
     {
         label: "Seguimientos",
-        icon: <ReceiptText className="w-5 h-5" />,
+        icon: <FolderKanbanIcon className="w-5 h-5" />,
         subItems: [
             { to: "/seguimientos/facturacion", label: "Facturación" },
             { to: "/seguimientos/reporte", label: "Reporte de Seguimientos" }
