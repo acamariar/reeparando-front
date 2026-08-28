@@ -57,6 +57,7 @@ export type MovimientoCuentaColaborador = {
     paidAmount: number;
     pendingAmount: number;
     createdAt: string;
+    paidAt?: string | null;
     notes?: string | null;
     deletedAt?: string | null;
 };
@@ -68,6 +69,7 @@ export type CreateMovimientoCuentaColaboradorPayload = {
     direction: DireccionCuentaColaborador;
     amount: number;
     paidAmount?: number;
+    paidAt?: string;
     pendingAmount?: number;
     notes?: string;
 };

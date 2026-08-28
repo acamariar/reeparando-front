@@ -56,7 +56,7 @@ export default function ColaboradorDetail() {
         () =>
             movimientos.map((m) => ({
                 ...m,
-                createdAtDisplay: formatfecha(m.createdAt),
+                createdAtDisplay: formatfecha(m.paidAt ?? m.createdAt),
                 typeDisplay:
                     m.type === "VENTA"
                         ? "Venta"
@@ -115,6 +115,7 @@ export default function ColaboradorDetail() {
                 amount: value,
                 paidAmount: value,
                 pendingAmount: 0,
+                paidAt,
                 notes: notes.trim() || undefined,
             });
 

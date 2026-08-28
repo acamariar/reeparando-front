@@ -7,8 +7,15 @@ import type { Seguimiento } from "../types/Seguimiento";
 
 function formatDate(value?: string | null) {
     if (!value) return "—";
-    const date = new Date(value);
+
+    const parts = value.split("-");
+    if (parts.length !== 3) return value;
+
+    const [year, month, day] = parts.map(Number);
+    const date = new Date(year, month - 1, day);
+
     if (Number.isNaN(date.getTime())) return value;
+
     return new Intl.DateTimeFormat("es-AR", {
         dateStyle: "long",
     }).format(date);
