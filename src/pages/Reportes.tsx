@@ -188,6 +188,7 @@ export default function GananciasPage() {
                                                 <tr key={sale.id} className="border-b last:border-0">
                                                     <td className="py-2 pr-4">{sale.date}</td>
                                                     <td className="py-2 pr-4">{colaboradorName(sale.collaboratorId)}</td>
+                                                    <td className="py-2 pr-4">{sale.clientName}</td>
                                                     <td className="py-2 pr-4">{money(sale.amount)}</td>
                                                     <td className="py-2 pr-4">{money(sale.commissionAmount)}</td>
                                                     <td className="py-2 pr-4">{money(sale.companyNet)}</td>

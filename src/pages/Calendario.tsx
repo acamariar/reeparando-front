@@ -51,7 +51,7 @@ export default function Calendario() {
     const employees = useBoundStore((s) => s.employees);
     const getEmployees = useBoundStore((s) => s.getEmployees);
     const getProjects = useBoundStore((s) => s.getProjects);
-
+    const projects = useBoundStore((s) => s.projects);
     const timeEntries = useBoundStore((s) => s.timeEntries);
     const isLoadingTime = useBoundStore((s) => s.isLoadingTime);
     const timeError = useBoundStore((s) => s.timeError);
@@ -105,6 +105,9 @@ export default function Calendario() {
         return map;
     }, [timeEntries]);
 
+    const projectsMap = useMemo(() => {
+        return new Map(projects.map((p) => [p.id, p]));
+    }, [projects]);
 
 
 
@@ -243,6 +246,8 @@ export default function Calendario() {
                                                 const name = employee
                                                     ? `${employee.firstName} ${employee.lastName}`
                                                     : entry.employeeId;
+                                                const project = projectsMap.get(entry.projectId);
+                                                const projectName = project ? project.name : entry.projectId;
 
                                                 return (
                                                     <div
@@ -250,8 +255,12 @@ export default function Calendario() {
                                                         className="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-[11px] text-slate-700 shadow-sm"
                                                     >
                                                         <div className="flex items-center justify-between gap-2">
-                                                            <span className="truncate font-medium">
+                                                            <span
+                                                                className="truncate font-medium"
+                                                                title={`${name} - ${projectName}`}
+                                                            >
                                                                 {name}
+                                                                <span className="font-normal text-slate-400"> - {projectName}</span>
                                                             </span>
                                                             <span className="text-slate-500">
                                                                 {Number(entry.hours ?? 0)}h
@@ -262,7 +271,23 @@ export default function Calendario() {
                                             })}
 
                                             {dayEntries.length > 4 && (
-                                                <div className="text-[11px] text-slate-500">
+                                                <div
+                                                    className="text-[11px] text-slate-500 cursor-help"
+                                                    title={dayEntries
+                                                        .slice(4)
+                                                        .map((entry) => {
+                                                            const employee = employees.find((e) => e.id === entry.employeeId);
+                                                            const name = employee
+                                                                ? `${employee.firstName} ${employee.lastName}`
+                                                                : entry.employeeId;
+
+                                                            const project = projectsMap.get(entry.projectId);
+                                                            const projectName = project ? project.name : entry.projectId;
+
+                                                            return `${name} - ${projectName} (${Number(entry.hours ?? 0)}h)`;
+                                                        })
+                                                        .join("\n")}
+                                                >
                                                     +{dayEntries.length - 4} más
                                                 </div>
                                             )}

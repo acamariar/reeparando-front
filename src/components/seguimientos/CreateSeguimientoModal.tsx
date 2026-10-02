@@ -56,7 +56,6 @@ export function CreateSeguimientoModal({ open, onClose, mode, seguimiento, actio
     const getColaboradores = useBoundStore((s) => s.getColaboradores);
     const updateSeguimiento = useBoundStore((s) => s.updateSeguimiento);
     const [backendError, setBackendError] = useState("");
-
     const {
         register,
         handleSubmit,
