@@ -19,9 +19,11 @@ export default function NominaPage() {
 
 
     useEffect(() => {
-        getEmployees?.(1, 20).catch(() => { });
+        getEmployees?.(1, 50).catch(() => { });
     }, [getEmployees]);
 
+    const employeeconsaldoDiferentea0paramostrar = employees.filter((e) => Number(e.saldoActual ?? 0) !== 0);
+    const employeeconsaldo0paramostrar = employees.filter((e) => Number(e.saldoActual ?? 0) === 0);
     return (
         <AppLayout>
             <div className="space-y-4">
@@ -59,7 +61,39 @@ export default function NominaPage() {
 
                 {/* Lista */}
                 <div className="grid gap-3 lg:grid-cols-2">
-                    {employees.map((e) => (
+                    {employeeconsaldoDiferentea0paramostrar.map((e) => (
+                        <div
+                            key={e.id}
+                            className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm flex items-center justify-between"
+                        >
+                            <div className="flex items-center gap-3">
+                                <div
+                                    className="w-10 h-10 rounded-full bg-primary/15 text-primary font-semibold flex items-center justify-center">
+                                    {e.firstName[0]}{e.lastName[0]}
+                                </div>
+                                <div>
+                                    <p
+                                        onClick={() => navigate(`/empleados/${e.id}`)}
+                                        className="font-semibold text-slate-900 cursor-pointer hover:underline ">{e.firstName} {e.lastName}</p>
+                                    <p className="text-xs text-slate-500">{e.specialty}</p>
+                                    <p className="text-xs text-slate-500">{e.phone}</p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-xs text-slate-500">Saldo actual</p>
+                                <p className={`text-lg font-bold ${Number(e.saldoActual ?? 0) > 0 ? "text-rose-600" : "text-green-600"}`}>
+                                    ${Number(e.saldoActual ?? 0).toLocaleString()}
+                                </p>
+                                <button
+                                    className="mt-2 inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700"
+                                    onClick={() => setPayEmpId(e.id)}
+                                >
+                                    <Wallet className="w-4 h-4" /> Pagar
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                    {employeeconsaldo0paramostrar.map((e) => (
                         <div
                             key={e.id}
                             className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm flex items-center justify-between"
